@@ -1,0 +1,17 @@
+README.md
+.ipynb_checkpoints
+iCub_Vergence
+dependencies
+test.py
+.idea
+__pycache__
+cython_modules
+training_data
+loss1_scene10.png
+loss2_scene10.png
+loss3_scene10.png
+loss_ts6_1.png
+loss_ts6_2.png
+loss_ts6_3.png
+stereo_matching
+calculateAccuracy.ipynb
