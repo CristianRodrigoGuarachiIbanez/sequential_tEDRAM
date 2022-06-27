@@ -16,7 +16,7 @@ from visualization_tools.visualizationKit import TerminalGraphics
 from dataset_tools.h5Writer import H5Writer
 from cython_modules.visualizer import *
 # default training parameters
-_batch_size = 100
+_batch_size = 2100
 _model_id = 1
 _n_steps = 10
 # paths to the datasets
@@ -27,7 +27,7 @@ def main(list_params: str, gpu_id: int, dataset_id: int, model_id: int, use_chec
          unique_glimpse: int, output_mode: int, use_init_matrix: int, headless,
          scale_inputs: float, normalize_inputs: bool, use_batch_norm: bool, dropout: int, weighting: int,
          iterations: int, zoom_factor: float):
-    if (dataset_id < 5):
+    if (dataset_id <= 5):
         n_classes = 6
     else:
         n_classes =7
@@ -49,7 +49,7 @@ def main(list_params: str, gpu_id: int, dataset_id: int, model_id: int, use_chec
     if (model_id == 0):
         print('model ID 0 is not available');
     elif (model_id == 1):
-        tedram.create_tedram_model(learning_rate=1, n_steps=n_steps, glimpse_size=glimpse_size, coarse_size=coarse_size, n_filters=128, filter_sizes=(3, 5),
+        tedram.create_tedram_model(learning_rate=0.0001, n_steps=n_steps, glimpse_size=glimpse_size, coarse_size=coarse_size, n_filters=128, filter_sizes=(3, 5),
                              n_features=fc_dim, RNN_size_1=enc_dim, RNN_size_2=dec_dim, n_classes=n_classes, output_mode=output_mode,
                              use_init_matrix=use_init_matrix, clip_value=clip_value, unique_emission=unique_emission, unique_glimpse=unique_glimpse,
                              bn=use_batch_norm, dropout=dropout, use_weighted_loss=False, localisation_cost_factor=1)
@@ -69,7 +69,10 @@ def main(list_params: str, gpu_id: int, dataset_id: int, model_id: int, use_chec
     loader = LOADER()
     # -------------------------- load paths -------------------------
     data_path: str = datasets[dataset_id]
-    labels_path: str = datasets[0]  # 0: path_labels 6 labels
+    if(dataset_id==6):
+        labels_path = datasets[-1]
+    else:
+        labels_path: str = datasets[0]  # 0: path_labels 6 labels
     # ------------------------- init data values ------------------------
     loader.load_image_data(data_path=data_path)
     loader.load_label_data(labels_path=labels_path)

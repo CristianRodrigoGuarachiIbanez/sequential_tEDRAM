@@ -4,7 +4,7 @@ from os import chdir, makedirs
 from os.path import dirname, exists
 from typing import List
 from numpy import asarray, ndarray, uint8, linspace, pi, sin, abs, random
-def show_4Darray_matplot(plot_image:ndarray, title:str, h_plot:int, v_plot:int, index:int)->None:
+def show_4Darray_matplot(plot_image:ndarray, title:str, h_plot:int, v_plot:int, index:int, path_disparity = "./training_data/disparity_maps")->None:
     '''
     function to plot a 4D numpy array
     params: plot_image      -- 4D array to plot
@@ -13,7 +13,7 @@ def show_4Darray_matplot(plot_image:ndarray, title:str, h_plot:int, v_plot:int, 
             v_plot          -- number of images in vertical direction
     '''
     path = "/home/cristian/PycharmProjects/tEDRAM/tEDRAM2/training_data/disparity_maps"
-    path_disparity = "/scratch/gucr/tEDRAM2/training_data/disparity_maps"
+
     if not exists(path_disparity):
         makedirs(path_disparity)
     chdir(path_disparity)

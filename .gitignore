@@ -1,4 +1,3 @@
-README.md
 .ipynb_checkpoints
 iCub_Vergence
 dependencies
@@ -14,4 +13,11 @@ loss_ts6_1.png
 loss_ts6_2.png
 loss_ts6_3.png
 stereo_matching
-calculateAccuracy.ipynb
+commands.txt
+images
+image_final.png
+outputs
+output
+checkpoints_reader.py
+hm_40.png
+token.txt

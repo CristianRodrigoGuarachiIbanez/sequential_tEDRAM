@@ -10,8 +10,10 @@ config:Dict[str, B] = {
     'input_affectnet': (6,100,100,1),
 
     # Paths to the datasets
-    'path_labels': "/scratch/gucr/tEDRAM2/training_data/label_data.txt",
+    'path_labels': "/scratch/gucr/tEDRAM2/training_data/labels.txt",
     'path_labels_affectnet': "/scratch/gucr/tEDRAM2/training_data/emotions_labels.txt",
+    'path_labels_one_output': "/scratch/gucr/tEDRAM2/training_data/labels_counting.txt",
+
 
     'scene_image': "/scratch/gucr/tEDRAM2/training_data/scene_image_data.h5",
     'disparity_maps_sum': "/scratch/gucr/tEDRAM2/training_data/disparity_maps_s.h5",
@@ -28,8 +30,7 @@ datasets = [config['path_labels'],
             config['input_binocular_arrays'],
             config['affectnet_data'],
             config["path_labels_affectnet"],
-
-
+            config["path_labels_one_output"]
         ]
 
 

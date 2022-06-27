@@ -43,7 +43,7 @@ class Sampler(object):
         if(self._data.ndim==3):
             self._sample = self._data[:samp,:,:]
         elif (self._data.ndim == 4):
-            self._sample = self._data[:samp, :, :, :]
+            self._sample = self._data[samp:samp*2, :, :, :]
         else:
             self._sample = self._data[:samp,:,:,:,:]
     def _sum_img(self)->None:
@@ -85,19 +85,19 @@ class Sampler(object):
             file.saveImgDataIntoGroup([self._sample], " ", dataset)
 
 if(__name__=="__main__"):
-    file:str = r"/training_data/AffectNet_train_data_keras.h5" #AffectNet_train_data_keras.h5
-    output = r"/scratch/gucr/tEDRAM2/training_data/emotions/"
+    file:str = r"/training_data/disparity_maps_56imgs.h5"#AffectNet_train_data_keras.h5" #AffectNet_train_data_keras.h5
+    output = r"/scratch/gucr/tEDRAM2/training_data/"
 
-    datasetname:str ='emotions'
+    datasetname:str ="disparity_arrays_56" # "disparity_arrays_s" #'emotions'
     s = Sampler(filename=file)
     s.recover_dataset(datasetname=datasetname)
-    # s.write_data("sample_disparity_maps.txt", 100)
+    s.write_data("sample_disparity_maps.txt", 2000)
     # sample = s.get_sample()
     #s.write_h5data(output, ['disparity_array_56'])
-    sample = s.get_sample()
-    print("sample shape ->", sample.shape)
-    for i in range(len(sample)):
-        imwrite(output +"scene_"+str(i)+".png", sample[i,:,:])
+    #sample = s.get_sample()
+    #print("sample shape ->", sample.shape)
+    #for i in range(len(sample)):
+        #imwrite(output +"scene_"+str(i)+".png", sample[i,:,:])
     #print(sample.shape)
 
     

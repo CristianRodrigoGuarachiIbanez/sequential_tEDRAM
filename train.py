@@ -30,8 +30,10 @@ def train(list_params:str, gpu_id:int, dataset_id:int, model_id:int, load_path:s
     # train on CDS?
     if (dataset_id ==6):
         n_classes = 7 # ------ OUTPUT
+    elif(model_id==2):
+        n_classes = 1
     else:
-        n_classes = 6
+        n_classes = 4 # 6 oder 4
     # train on high-res input?
     input_shape:Tuple = load_dataset(dataset_id, config)
     print("input shape: ", input_shape, "dateset ID: ", dataset_id)
@@ -68,38 +70,47 @@ def train(list_params:str, gpu_id:int, dataset_id:int, model_id:int, load_path:s
                                        RNN_size_1=enc_dim, RNN_size_2=dec_dim, n_classes=n_classes, output_mode=output_mode, use_init_matrix=use_init_matrix,
                                        emission_bias=emission_bias, clip_value=clip_value, unique_emission=unique_emission, unique_glimpse=unique_glimpse,
                                        bn=use_batch_norm, dropout=dropout, use_weighted_loss=use_weighted_loss, localisation_cost_factor=localisation_cost_factor);
+        elif (model_id ==2):
+            tedram.create_one_output_model(learning_rate=learning_rate, n_steps=n_steps, glimpse_size=glimpse_size, coarse_size=coarse_size, n_filters=128, filter_sizes=(3, 5), n_features=fc_dim,
+                                       RNN_size_1=enc_dim, RNN_size_2=dec_dim, n_classes=n_classes, output_mode=output_mode, use_init_matrix=use_init_matrix,
+                                       emission_bias=emission_bias, clip_value=clip_value, unique_emission=unique_emission, unique_glimpse=unique_glimpse,
+                                       bn=use_batch_norm, dropout=dropout, use_weighted_loss=use_weighted_loss, localisation_cost_factor=localisation_cost_factor)
         else:
 
             print('[Error] Only model 1 is available!\n')
             exit()
 
     # model summary
-    if(list_params=='all' and model_id==2):
+    if(list_params=='all' and model_id==3):
         tedram.model.get_layer('edram_cell').summary()
     elif (list_params!='none'):
         tedram.get_model().summary()
-
-    # --------- recover the data paths load the data
-
+    ###########################################################
+    ######### recover the data paths load the data ###########
+    ##########################################################
     data_path: str = datasets[dataset_id]
     if(dataset_id==6):
+        labels_path = datasets[-2]
+    elif(model_id==2):
         labels_path = datasets[-1]
     else:
-        labels_path: str = datasets[0] # 0: path_labels 6 labels
+        labels_path: str = datasets[0] # 0: path_labels 6 oder 4 labels
 
     print("\n[Info] Opening", data_path)
 
     # initialize the declared image and label data
     loader:LOADER = LOADER()
 
-
-    ## ----------- load the image data
+    ############################################
+    ################ load the image data ######
+    ############################################
     loader.load_image_data(data_path)
     # ------------- load labels 
     loader.load_label_data(labels_path)
-
-    ## ----------------------- specify the arm side for the labels
-    # -------------------------------- split into train and test set
+    ###############################################################
+    ################### specify the arm side for the labels ######
+    ################### split into train and test set ############
+    ###############################################################
 
     if(dataset_id==1):
         loader.split_dataset_nongroup(dataset='scene_img', dataset_id=dataset_id)
@@ -122,9 +133,9 @@ def train(list_params:str, gpu_id:int, dataset_id:int, model_id:int, load_path:s
     test_labels:ndarray=loader.get_test_labels()
     train_locations: ndarray=loader.get_train_locations();
     test_locations:ndarray=loader.get_test_locations()
-
-    # ------------------------------- define the length of the set according the predefined indices
-
+    ##################################################################################################
+    ################## define the length of the set according the predefined indices ##################
+    ##################################################################################################
     # normalize input data
     if(normalize_inputs):
         indices = list(range(loader.get_n_train()))
@@ -168,8 +179,9 @@ def train(list_params:str, gpu_id:int, dataset_id:int, model_id:int, load_path:s
         print("  Locations:", train_locations.shape[1],"\n")
     else:
         print("  Locations:", 6,"\n")
-
-    # create callbacks
+    #################################################
+    #################### create callbacks ###########
+    #################################################
     history = History()
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.333, patience=1, min_lr=0.00001, verbose=0)
     checkpoint = ModelCheckpoint(filepath=save_path+'checkpoint_weights', monitor='val_loss', save_best_only=True, save_weights_only=True)
@@ -189,10 +201,9 @@ def train(list_params:str, gpu_id:int, dataset_id:int, model_id:int, load_path:s
             epochs=n_epochs,
             verbose=1,
             callbacks=[history, reduce_lr, checkpoint],
-            validation_data=batch_generator(dataset_size=loader.get_n_test(), batch_size=batch_size, init_state_size=(enc_dim, dec_dim),
-                                            n_steps=n_steps, features=test_images, labels=test_labels, locations=test_locations, augment=None, scale=scale_inputs,
-                                            normalize=normalize_inputs, mean=test_mean, std=test_sd, mode=output_mode, mode2=use_init_matrix, mode3=headless, model_id=model_id,
-                                            glimpse_size=glimpse_size, zoom=zoom_factor),
+            validation_data=batch_generator(dataset_size=loader.get_n_test(), batch_size=batch_size, init_state_size=(enc_dim, dec_dim), n_steps=n_steps, features=test_images, labels=test_labels,
+                                            locations=test_locations, augment=None, scale=scale_inputs, normalize=normalize_inputs, mean=test_mean, std=test_sd, mode=output_mode,
+                                            mode2=use_init_matrix, mode3=headless, model_id=model_id, glimpse_size=glimpse_size, zoom=zoom_factor),
             validation_steps=int(loader.get_n_test() / batch_size), use_multiprocessing=False
         )
 

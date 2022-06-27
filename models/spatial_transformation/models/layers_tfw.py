@@ -160,11 +160,7 @@ class BilinearInterpolation(Layer):
         transformations = K.reshape(affine_transformation, shape=(batch_size, 2, 3))  # ? x  2 x 3
         # transformations = K.cast(affine_transformation[:, 0:2, :], 'float32')
         regular_grids = self._make_regular_grids(batch_size, *output_size)  # bilinear_interpolation_i/Reshape_4:0", shape=(?, 3, 676), dtype=float32
-<<<<<<< HEAD
-        sampled_grids = K.batch_dot(transformations, regular_grids)
-=======
         sampled_grids = K.batch_dot(transformations, regular_grids) #  (?, 2, 676) Tensor("bilinear_interpolation_1/MatMul:0", shape=(?, 2, 676), dtype=float32)
->>>>>>> 2230c6c23683233ffa8097af3564316f0d3e3add
         interpolated_image = self._interpolate(X, sampled_grids, output_size)  # (None, 10,120,160,1) |  (None, 3, 676) | (26, 26)
         # print('Reshape from Binocular:{}'.format(interpolated_image))
         new_shape = (batch_size, output_size[0], output_size[1], num_channels)
