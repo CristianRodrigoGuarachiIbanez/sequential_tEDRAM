@@ -1,0 +1,15 @@
+.ipynb_checkpoints
+cython_modules
+training_data
+images
+iCub_Vergence
+dependencies
+stereo_matching
+__pycache__
+token.txt
+graphic_data.py
+img_sampler.py
+checkpoints_reader.py
+collect_images.py
+seq.py
+test.py
