@@ -65,4 +65,3 @@ And run the script on a free GPU:
 
 	python start.py --gpu=1
 
-#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
