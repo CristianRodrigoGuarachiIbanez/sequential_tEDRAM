@@ -2,6 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bf843628-e1fc-4231-a69a-beebedfa5758" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/tEDRAM2.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/cython_modules/cython_opencvMat/opencv_mat.cpython-38-x86_64-linux-gnu.so" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/cython_modules/cython_opencvMat/spatial_transformer.png" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/cython_modules/heatmaps/gather_image/gather" afterDir="false" />
@@ -11,7 +17,10 @@
       <change afterPath="$PROJECT_DIR$/cython_modules/heatmaps/glimpse4/glimpse4.pyx" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/cython_modules/heatmaps/glimpse4/setup.py" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/cython_modules/heatmaps/glimpse4/visualizer.cpython-38-x86_64-linux-gnu.so" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/checkpoints_reader.py" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/readme.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cython_modules/cython_opencvMat/LICENSE.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cython_modules/cython_opencvMat/LICENSE.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cython_modules/cython_opencvMat/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/cython_modules/cython_opencvMat/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cython_modules/cython_opencvMat/opencv_mat.pxd" beforeDir="false" afterPath="$PROJECT_DIR$/cython_modules/cython_opencvMat/opencv_mat.pxd" afterDir="false" />
@@ -26,6 +35,8 @@
       <change beforePath="$PROJECT_DIR$/cython_modules/heatmaps/glimpse/GlimpseVisualizer.pyx" beforeDir="false" afterPath="$PROJECT_DIR$/cython_modules/heatmaps/glimpse/GlimpseVisualizer.pyx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cython_modules/heatmaps/glimpse/build/temp.linux-x86_64-3.8/GlimpseVisualizer.o" beforeDir="false" afterPath="$PROJECT_DIR$/cython_modules/heatmaps/glimpse/build/temp.linux-x86_64-3.8/GlimpseVisualizer.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cython_modules/heatmaps/glimpse/visualizer.cpython-38-x86_64-linux-gnu.so" beforeDir="false" afterPath="$PROJECT_DIR$/cython_modules/heatmaps/glimpse/visualizer.cpython-38-x86_64-linux-gnu.so" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cython_modules/heatmaps/heat_maps/heatMap.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/cython_modules/heatmaps/heat_maps/heatMap.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cython_modules/heatmaps/heat_maps/heatmap" beforeDir="false" afterPath="$PROJECT_DIR$/cython_modules/heatmaps/heat_maps/heatmap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cython_modules/image_analysis/objectDetector.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/cython_modules/image_analysis/objectDetector.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -62,11 +73,13 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;last_opened_file_path&quot;: &quot;/home/cristian/PycharmProjects/yolo&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "/home/cristian/PycharmProjects/yolo"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/training_data" />
@@ -180,6 +193,17 @@
       <updated>1646595719151</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
