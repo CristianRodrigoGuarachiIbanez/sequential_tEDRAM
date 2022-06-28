@@ -12,7 +12,6 @@ Dependencies
  * [cython]
  * [fuel] for inference
 
-
 Installation
 ------------
 

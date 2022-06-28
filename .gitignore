@@ -6,6 +6,7 @@ iCub_Vergence
 dependencies
 stereo_matching
 __pycache__
+.idea
 token.txt
 graphic_data.py
 img_sampler.py
@@ -13,3 +14,5 @@ checkpoints_reader.py
 collect_images.py
 seq.py
 test.py
+README.md
+#git@github.com:CristianRodrigoGuarachiIbanez/sequential_tEDRA
