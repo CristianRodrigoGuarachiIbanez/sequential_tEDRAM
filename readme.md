@@ -1,4 +1,6 @@
-# (t)EDRAM - (temporally) Enriched Deep Recurrent Visual Attention Model 
+
+# (t)EDRAM - (temporally) Enriched Deep Recurrent Visual Attention Model [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE) [![Python 3.6+](https://img.shields.io/badge/python-3.6+-blue.svg)](https://www.python.org/downloads/release/python-360/)
+
 
 A TensorFlow adaptation of the temporally Enriched Deep Recurrent Visual Attention Model (tEDRAM) for visually detected collisions in the iCub-simulated 3D-environment using a self-builded data set of video sequences.
 
