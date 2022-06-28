@@ -33,6 +33,9 @@ Create a virtual environment (e.g. tf21) using python 3.8, activate it and insta
 	conda activate tf21
 	conda install tensorflow-gpu
 	conda install keras
+Download the repository sequential_tEDRAM in the local repository and navigate in the archive tEDRAM:
+
+    /local_repository/sequential_tEDRAM/
 
 Datasets
 -------
