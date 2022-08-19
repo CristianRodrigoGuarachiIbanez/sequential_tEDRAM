@@ -18,7 +18,7 @@ from dataset_tools.fileLoader import LOADER, load_dataset
 from models.tedramManager import tEDRAM_TF
 
 def train(list_params:str, gpu_id:int, dataset_id:int, model_id:int, load_path:str, save_path:str,
-         batch_size:int, learning_rate:float, n_epochs:int, augment_input, rotation, n_steps:int, glimpse_size,
+         batch_size:int, learning_rate:float, n_epochs:int, augment_input:bool, rotation, n_steps:int, glimpse_size,
          coarse_size:int, fc_dim:int, enc_dim:int, dec_dim:int, n_classes:int, output_mode:int, use_init_matrix:int,
          headless:int, emission_bias:int, clip_value:int, unique_emission:int, unique_glimpse:int, scale_inputs:float,
          normalize_inputs:bool,use_batch_norm:bool, dropout:int, use_weighted_loss:int,
@@ -189,7 +189,7 @@ def train(list_params:str, gpu_id:int, dataset_id:int, model_id:int, load_path:s
     # create data generator for data augmentation
     datagen = None
     if augment_input:
-        datagen = rotation, dataset_id
+        datagen = True
     # train the model
     try:
         hist = tedram.model.fit(
