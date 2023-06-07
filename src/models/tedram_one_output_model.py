@@ -7,7 +7,6 @@ from numpy import ndarray, array, zeros, linspace, asarray, sqrt
 from tensorflow.keras.layers import (Input,
                                      LSTM,
                                      Dense,
-                                     Activation,
                                      Flatten,
                                      Reshape,
                                      Conv2D,
@@ -16,19 +15,14 @@ from tensorflow.keras.layers import (Input,
                                      BatchNormalization,
                                      Dropout,
                                      concatenate,
-                                     multiply,
-                                     add,
-                                     average,
-                                     maximum, Lambda)
+                                     add)
 from tensorflow.keras.models import Model
-from tensorflow.keras.optimizers import Adam, SGD
+from tensorflow.keras.optimizers import Adam
 from .spatial_transformation.models.layers_v2 import BilinearInterpolation
-from .weighted_losses import weighted_mean_squared_error
 from tensorflow import Tensor
 from .tedram_cell import tedram_cell
 from .slices import Slice
-from typing import List, Tuple, Callable, TypeVar, Any
-from models.weighted_losses import weighted_categorical_crossentropy, weighted_mean_squared_error
+from typing import List, Tuple, Any
 
 # number of emotions per class in ANet training file (in thousands)
 n = asarray([78, 144, 29, 16, 8, 5, 28])
@@ -66,7 +60,7 @@ def emission_weights(output_size: int, zoom_bias: int) -> List[ndarray]:
 
 
 
-def tedram_model(input_shape: Tuple, learning_rate: float = 0.0001, steps: int = 3, glimpse_size: Tuple[int, int] = (26, 26), coarse_size: Tuple[int, int] = (12, 12),
+def tedram_op_model(input_shape: Tuple, learning_rate: float = 0.0001, steps: int = 3, glimpse_size: Tuple[int, int] = (26, 26), coarse_size: Tuple[int, int] = (12, 12),
                  n_filters: int = 128, filter_sizes: Tuple[int, int] = (3, 5), n_features: int = 1024,
                  RNN_size_1: int = 512, RNN_size_2: int = 512, n_classes: int = 6, output_mode: int = 0,
                  use_init_matrix: int = True, emission_bias: int = 1, clip_value: int = 1, unique_emission: int = False,
@@ -158,22 +152,30 @@ def tedram_model(input_shape: Tuple, learning_rate: float = 0.0001, steps: int =
     conv_6: conv_3;
     conv_6_bias: conv_3_bias
     if (unique_glimpse == False):
-        conv_1 = Conv2D(int(n_filters / 2), filter_size1, padding='same', activation='relu', use_bias=False, name='glimpse_conv1')
-        conv_1_bias = LocallyConnected2D(int(n_filters / 2), (1, 1), padding='valid', use_bias=False, name='glimpse_conv1_bias')
+        conv_1 = Conv2D(int(n_filters / 2), filter_size1, padding='same', activation='relu', use_bias=False,
+                        name='glimpse_conv1')
+        conv_1_bias = LocallyConnected2D(int(n_filters / 2), (1, 1), padding='valid', use_bias=False,
+                                         name='glimpse_conv1_bias')
     else:
         conv_1 = None
         conv_1_bias = None
     # 64 filters, 3x3 Convolution, no padding --> 24x24
-    conv_2: Conv2D = Conv2D(int(n_filters / 2), filter_size1, padding=glimpse_padding, activation='relu', use_bias=False, name='glimpse_conv2')
-    conv_2_bias: LocallyConnected2D = LocallyConnected2D(int(n_filters / 2), (1, 1), padding='valid', use_bias=False, name='glimpse_conv2_bias')
+    conv_2: Conv2D = Conv2D(int(n_filters / 2), filter_size1, padding=glimpse_padding, activation='relu',
+                            use_bias=False, name='glimpse_conv2')
+    conv_2_bias: LocallyConnected2D = LocallyConnected2D(int(n_filters / 2), (1, 1), padding='valid', use_bias=False,
+                                                         name='glimpse_conv2_bias')
     # max pooling, 24x24 --> 12x12
     max_pooling_1 = MaxPooling2D(pool_size=(2, 2), name='glimpse_max_pooling1')
     # 128 filters, 3x3 Convolution, padding to preserve dimensionality of the tensor
-    conv_3: Conv2D = Conv2D(n_filters, filter_size1, padding='same', activation='relu', use_bias=False, name='glimpse_conv3')
-    conv_3_bias: LocallyConnected2D = LocallyConnected2D(n_filters, (1, 1), padding='valid', use_bias=False, name='glimpse_conv3_bias')
+    conv_3: Conv2D = Conv2D(n_filters, filter_size1, padding='same', activation='relu', use_bias=False,
+                            name='glimpse_conv3')
+    conv_3_bias: LocallyConnected2D = LocallyConnected2D(n_filters, (1, 1), padding='valid', use_bias=False,
+                                                         name='glimpse_conv3_bias')
     # 128 filters, 3x3 Convolution, padding to preserve dimensionality of the tensor
-    conv_4: Conv2D = Conv2D(n_filters, filter_size1, padding='same', activation='relu', use_bias=False, name='glimpse_conv4')
-    conv_4_bias: LocallyConnected2D = LocallyConnected2D(n_filters, (1, 1), padding='valid', use_bias=False, name='glimpse_conv4_bias')
+    conv_4: Conv2D = Conv2D(n_filters, filter_size1, padding='same', activation='relu', use_bias=False,
+                            name='glimpse_conv4')
+    conv_4_bias: LocallyConnected2D = LocallyConnected2D(n_filters, (1, 1), padding='valid', use_bias=False,
+                                                         name='glimpse_conv4_bias')
     # max pooling, 12x12 --> 6x6
     max_pooling_2 = MaxPooling2D(pool_size=(2, 2), name='glimpse_max_pooling2')
     # 160 filters, 3x3 Convolution, padding to preserve dimensionality of the tensor
@@ -205,7 +207,7 @@ def tedram_model(input_shape: Tuple, learning_rate: float = 0.0001, steps: int =
     # fully connected, output_dim=1024
     cla_fc_2 = Dense(n_features, activation='relu', name='classification_fc2')
     # fully connected, output_dim=6, softmax activation
-    cla_fc_3 = Dense(n_classes, activation='softmax', name='classification_fc3') # auf relu wechseln
+    cla_fc_3 = Dense(n_classes, activation='relu', name='classification_fc3') # auf relu wechseln
 
     ## Emission Network
     if unique_emission == False:
@@ -316,19 +318,10 @@ def tedram_model(input_shape: Tuple, learning_rate: float = 0.0001, steps: int =
     # optimization algorithm
     optimizer = Adam(lr=learning_rate, clipnorm=10.)
     # define losses
-    if use_weighted_loss:
-        # weighted losses
-        if n_classes == 7:
-            # only use collision outcome weights for collision classification
-            classification_loss = weighted_categorical_crossentropy(emotion_weights[use_weighted_loss])
-            localisation_loss = weighted_mean_squared_error(localisation_weights[1 if n_classes == 7 else 0])
-        elif n_classes ==6:
-            classification_loss = 'categorical_crossentropy' # "binary_crossentropy" 
-            localisation_loss = weighted_mean_squared_error(localisation_weights[1 if n_classes == 6 else 0])
-    else:
-        # standard losses
-        classification_loss = 'categorical_crossentropy' #'mean_squared_error'
-        localisation_loss = 'mean_squared_error'
+
+    # standard losses
+    classification_loss = 'mean_squared_error'
+    localisation_loss = 'mean_squared_error'
 
     ###########################
     ###  Compile the Model  ###

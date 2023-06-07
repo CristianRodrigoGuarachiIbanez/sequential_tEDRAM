@@ -6,29 +6,18 @@
 
 """
 
-from typing import List, Tuple, Any
-from numpy import ndarray, array, zeros, linspace, asarray, sqrt
+from numpy import ndarray, array, zeros, asarray, sqrt
 from tensorflow.keras.layers import (Input,
-                          LSTM,
-                          Dense,
-                          Activation,
-                          Flatten,
-                          Reshape,
-                          Conv2D,
-                          LocallyConnected2D,
-                          MaxPooling2D,
-                          BatchNormalization,
-                          Dropout,
-                          concatenate,
-                          multiply,
-                          add,
-                          average,
-                          maximum, Lambda)
+                                     Dense,
+                                     Conv2D,
+                                     LocallyConnected2D,
+                                     BatchNormalization,
+                                     Dropout,
+                                     multiply,
+                                     add)
 
 from tensorflow.keras.models import Model
-#from models.spatial_transformation.models.layers_tfw import BilinearInterpolation
-#from models.spatial_transformation.models.bilinearInterpolation import BilinearInterpolation
-from models.spatial_transformation.models.layers_v2 import BilinearInterpolation
+from src.models.spatial_transformation.models.layers_v2 import BilinearInterpolation
 from typing import List,Tuple, TypeVar, Any
 from tensorflow import Tensor
 # number of emotions per class in ANet training file (in thousands)
@@ -67,16 +56,15 @@ def emission_weights(output_size: int, zoom_bias: int) -> List[ndarray]:
     return weights
 
 
-def tedram_cell(input_shape:Tuple[int,int,int]=(120,160, 1), glimpse_size:Tuple[int,int]=(26,26),
-                 n_filters:int=128, RNN_size_1:int=512, RNN_size_2:int=512, bn:bool=True, dropout:int=0, clip_value:int=1,
-                 layers:Tuple=None, output_localisation:bool=True, step:int=0, unique_emission:int=False,
-                 unique_glimpse:int=False, emission_bias:int=1) -> Model:
+def tedram_cell(input_shape:Tuple[int,int,int]=(120,160, 1), glimpse_size:Tuple[int,int]=(26,26), n_filters:int=128, RNN_size_1:int=512, RNN_size_2:int=512,
+                bn:bool=True, dropout:int=0,  layers:Tuple=None, output_localisation:bool=True, step:str=' ', unique_emission:int=False,
+                unique_glimpse:int=False, emission_bias:int=1) -> Model:
     """
         One timestep of the EDRAM network with temporally separated batch normalization
 
         Parameters:
 
-            * input_shape: input image dimensions
+            * input_shape: input image dimensions (120,160,1)
             * glimpse_size: dimensions of the extracted image patch (the glimpse)
             * n_filters: determines the number of filters in the glimpse CNN
             * filter_size: dimensions of the glimpse CNN kernel
@@ -143,7 +131,6 @@ def tedram_cell(input_shape:Tuple[int,int,int]=(120,160, 1), glimpse_size:Tuple[
     T:TypeVar = TypeVar('T',BilinearInterpolation,Conv2D,add,Any)
     ## Glimpse Network
     # spatial transformer, performs affine transformation of input image to a 26x26 patch
-    # x:T= BilinearInterpolation(glimpse_size, clip_value)([input_image, input_matrix])
     x:BilinearInterpolation = BilinearInterpolation(height=glimpse_size[0], width=glimpse_size[1])
     print('INPUT IMAGE:',input_image.shape)
     x:Tensor = x([input_image, input_matrix]);
@@ -189,6 +176,7 @@ def tedram_cell(input_shape:Tuple[int,int,int]=(120,160, 1), glimpse_size:Tuple[
 
     ## RNNs
     x = reshape_to_sequence(x);
+
     rnn1:ndarray = None;
     h1:ndarray = None;
     c1:ndarray=None;
@@ -218,7 +206,11 @@ def tedram_cell(input_shape:Tuple[int,int,int]=(120,160, 1), glimpse_size:Tuple[
     localisation:Dense=None
     if(output_localisation):
         if (unique_emission):
+
             localisation = Dense(6, activation='tanh', weights=emission_weights(RNN_size_2, emission_bias), name='emission')(rnn2)
+
+            localisation = Dense(6, activation='tanh', weights=emission_weights(RNN_size_2, emission_bias), name='emission_flat_loc')(rnn2)
+
         else:
             localisation = em(rnn2)
 
@@ -231,4 +223,4 @@ def tedram_cell(input_shape:Tuple[int,int,int]=(120,160, 1), glimpse_size:Tuple[
     else:
         outputs=[classification, h1, c1]
 
-    return Model(inputs, outputs, name='edram_cell_'+str(step))
+    return Model(inputs, outputs, name='edram_cell_'+ step)

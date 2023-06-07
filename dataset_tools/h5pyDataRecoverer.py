@@ -1,6 +1,6 @@
-from numpy import ndarray, asarray, array, zeros, ones
-from typing import List, Dict, Tuple, Any, Generator, TypeVar
-from sequenceGenerator import SequenceGenerator
+from numpy import ndarray, asarray, array
+from typing import List, Dict, Any, Generator, TypeVar
+from src.sequenceGenerator import SequenceGenerator
 from imageEdition import ImageEditor
 from h5py import File, Group
 

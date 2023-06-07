@@ -9,7 +9,7 @@ from sequenceConstructor import SequenceConstructor
 from numpy import ndarray, array, asarray, zeros, ones, hstack, reshape,transpose, uint8
 from cython_modules.data_augmentation.imageDataGenerator import ImageDataGenerator
 from cython_modules.data_augmentation.augmentation_manager import  PyImageDataGenerator
-from sys import exit
+
 def batch_generator(dataset_size: int, batch_size: int, init_state_size:Tuple[int,int], n_steps: int, features: ndarray,
                     labels: ndarray, locations:ndarray, augment:Tuple, scale:float, normalize:bool, mean:float, std:float,
                     mode:int, mode2:int, mode3:int, model_id:int, glimpse_size:Tuple[int,int], zoom:float):

@@ -11,8 +11,8 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.callbacks import History, ModelCheckpoint, ReduceLROnPlateau
 from os.path import exists
 from os import makedirs
-from config import config, datasets
-from batch_generator import batch_generator
+from src.config import config, datasets
+from src.batch_generator import batch_generator
 from models.tedram_model import tedram_model
 from dataset_tools.fileLoader import LOADER, load_dataset
 from models.tedramManager import tEDRAM_TF

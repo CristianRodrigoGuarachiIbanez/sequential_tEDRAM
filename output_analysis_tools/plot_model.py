@@ -6,7 +6,6 @@ import os
 from argparse import ArgumentParser
 from keras.utils import plot_model
 
-from models.model_keras import *
 from config import config
 
 

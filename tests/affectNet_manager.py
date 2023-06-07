@@ -3,7 +3,7 @@ import h5py
 from numpy import asarray, uint8, float64
 from pickle import dump, HIGHEST_PROTOCOL
 #filename = r"/scratch/facs_data/AffectNet/AffectNet_train_data_keras.hdf5"
-filename = "../training_data/binocular_image_data.h5"
+filename = "../src/training_data/binocular_image_data.h5"
 with h5py.File(filename, "r") as f:
     # List all groups
     print("Keys: %s" % f.keys())

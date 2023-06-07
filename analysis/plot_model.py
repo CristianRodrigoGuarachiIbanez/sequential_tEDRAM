@@ -6,8 +6,7 @@ import os
 from argparse import ArgumentParser
 from keras.utils import plot_model
 
-from models.model_keras import *
-from config import config
+from src.config import config
 
 
 def main(gpu_id, model_id, plot_name, plot_recurrent, plot_output_shapes,
