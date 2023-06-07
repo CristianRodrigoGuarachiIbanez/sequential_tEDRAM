@@ -6,10 +6,7 @@ import numpy as np
 from argparse import ArgumentParser
 from fuel.converters.base import fill_hdf5_file
 
-from keras.preprocessing.image import ImageDataGenerator
-from keras.models import load_model
-
-from models.model_keras import edram_model, tedram_model, STN_model
+from src.models.model_keras import edram_model, tedram_model, STN_model
 from config import config
 
 # default training parameters

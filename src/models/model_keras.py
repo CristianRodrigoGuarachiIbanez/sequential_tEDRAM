@@ -7,36 +7,31 @@
 
 """
 
-from typing import List, Tuple, Any
-from numpy import ndarray, array, zeros, linspace, asarray, sqrt
+from numpy import ndarray, array, zeros, linspace
 from tensorflow.keras.layers import (Input,
-                          LSTM,
-                          Dense,
-                          Activation,
-                          Flatten,
-                          Reshape,
-                          Conv2D,
-                          LocallyConnected2D,
-                          MaxPooling2D,
-                          BatchNormalization,
-                          Dropout,
-                          concatenate,
-                          multiply,
-                          add,
-                          average,
-                          maximum, Lambda)
+                                     LSTM,
+                                     Dense,
+                                     Flatten,
+                                     Reshape,
+                                     Conv2D,
+                                     LocallyConnected2D,
+                                     MaxPooling2D,
+                                     BatchNormalization,
+                                     Dropout,
+                                     concatenate,
+                                     add)
 
 
 from tensorflow.keras.models import Model
-from tensorflow.keras.optimizers import Adam, SGD
+from tensorflow.keras.optimizers import Adam
 #from models.spatial_transformation.models.layers_tfw import BilinearInterpolation
 #from models.spatial_transformation.models.bilinearInterpolation import BilinearInterpolation
-from models.spatial_transformation.models.layers_v2 import BilinearInterpolation
-from models.weighted_losses import weighted_mean_squared_error
+from src.models.spatial_transformation.models.layers_v2 import BilinearInterpolation
+from src.models.weighted_losses import weighted_mean_squared_error
 from tensorflow import Tensor
 from .model_keras_cell import tedram_cell
 from .slices import Slice
-from typing import List, Tuple, Callable, TypeVar,Any
+from typing import List, Tuple, Any
 
 localisation_weights: List[ndarray] = []
 localisation_weights.append(array([1.00, 0.25, 1.00, 0.25, 1.00, 1.00]))
