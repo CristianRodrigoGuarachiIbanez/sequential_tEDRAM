@@ -91,6 +91,7 @@ def tedram_model_56imgs(input_shape: Tuple, learning_rate: float = 0.0001, steps
     filter_size1, filter_size2 = list(zip(filter_sizes, filter_sizes))
     # activate dropout
     do = True if dropout > 0 else False
+
     ##################################
     # ######## Define Inputs #########
     ##################################
@@ -129,7 +130,7 @@ def tedram_model_56imgs(input_shape: Tuple, learning_rate: float = 0.0001, steps
     # layers for the EDRAM core cell
     # Glimpse Network (26x26 --> 192x4x4 --> 1024)
     # 64 filters, 3x3 Convolution, zero padding --> 26x26
-    if unique_glimpse == False:
+    if unique_glimpse is False:
         conv_1 = Conv2D(int(n_filters / 2), filter_size1, padding='same', activation='relu', use_bias=False,
                         name='glimpse_conv1')
         conv_1_bias = LocallyConnected2D(int(n_filters / 2), (1, 1), padding='valid', use_bias=False,
@@ -230,6 +231,7 @@ def tedram_model_56imgs(input_shape: Tuple, learning_rate: float = 0.0001, steps
 
     slCoarse: Slice = Slice([0, 0, 0, 0, 0], [-1, 1, -1, -1, -1], name='slice_coarse')
     input_image_co: Tensor = slCoarse(input_image)
+
     logging.debug('INPUT IMAGE COARSE: {}'.format(input_image_co.shape))
 
     input_image_coarse: Tensor = BilinearInterpolation(height=coarse_size[0], width=coarse_size[1])([input_image_co, input_matrix]); # (?, 12, 12, ?)
@@ -272,18 +274,17 @@ def tedram_model_56imgs(input_shape: Tuple, learning_rate: float = 0.0001, steps
     ####################################
 
     # -----------------  step zero (initialization)
-    step:cython.list = [[None, init_matrix if output_mode == 1 else input_matrix]]
-    # ------------------  step 1, INPUT_IMAGE (None, 10, 120,160,1) -> input_image[0][0] -> (120,160,1)
+
+    step: cython.list = [[None, init_matrix if output_mode == 1 else input_matrix]]
     sl_0: Slice = Slice([0, 0, 0, 0, 0], [-1, 1, -1, -1, -1], name='sel_0')
     input_image_0 = sl_0(input_image)
+    # ------------------  step 1, INPUT_IMAGE (None, 10, 120,160,1) -> input_image[0][0] -> (120,160,1)
+
     step.append(edram_cell[0](
         [input_image_0, init_matrix if use_init_matrix else input_matrix, init_h1, init_c1, init_h2, init_c2, b26, b24,
          b12, b6 if glimpse_size == (26, 26) else b4, b4]))
 
-    #print("LEN :", len(step), "LEN: ", len(edram_cell[0]), edram_cell )
-    #####################################################################
-    # #################### "recurrently" apply EDRAM network ############
-    #####################################################################
+    # ------------------- "recurrently" apply EDRAM network for all reminding steps
 
     i:cython.int
     for i in range(steps):
@@ -315,9 +316,9 @@ def tedram_model_56imgs(input_shape: Tuple, learning_rate: float = 0.0001, steps
                 concatenate([step[i][1] for i in range(0, steps+ 1)]))
     outputs: List[Any] = [classifications, localisations]
 
-    logging.debug("Classification output shape: {}".format(classifications.shape)) # (None, 6)
-    logging.debug("Locaisation output shape: {}".format(localisations.shape)) # (None, 2, 6)
-    logging.debug("Size of Input Set {} and Output Set {}".format(len(inputs), len(outputs))) # 11 2
+    logging.debug("Classification output shape: {}".format(classifications.shape))  # (None, 6)
+    logging.debug("Locaisation output shape: {}".format(localisations.shape))  # (None, 2, 6)
+    logging.debug("Size of Input Set {} and Output Set {}".format(len(inputs), len(outputs)))  # 11 2
 
     #########################################################
     # ###################### build the model ################
@@ -337,8 +338,7 @@ def tedram_model_56imgs(input_shape: Tuple, learning_rate: float = 0.0001, steps
         # weighted losses
         if n_classes == 6:
             # only use collision outcome weights for collision classification
-            # classification_loss = weighted_categorical_crossentropy(emotion_weights[use_weighted_loss])
-            classification_loss = None;
+            classification_loss = None
         else:
             classification_loss = 'categorical_crossentropy'
         localisation_loss = weighted_mean_squared_error(localisation_weights[1 if n_classes == 6 else 0])
