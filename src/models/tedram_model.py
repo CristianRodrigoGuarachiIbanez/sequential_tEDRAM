@@ -3,6 +3,11 @@
         * tedram_model      |> tEDRAM (with separate batch normalization per time step)
 """
 
+import sys
+import logging
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)s] %(message)s",
+                    handlers=[logging.FileHandler("debug.log"), logging.StreamHandler(sys.stdout)]
+                    )
 from numpy import ndarray, array, zeros, linspace, asarray, sqrt
 from tensorflow.keras.layers import (Input,
                                      LSTM,
@@ -100,9 +105,10 @@ def tedram_model(input_shape: Tuple, learning_rate: float = 0.0001, steps: int =
     filter_size1, filter_size2 = list(zip(filter_sizes, filter_sizes))
     # activate dropout
     do = True if dropout > 0 else False
-    #######################
-    ###  Define Inputs  ###
-    #######################
+
+    ##################################
+    # ######## Define Inputs #########
+    ##################################
     # input image and localization matrix
     input_image = Input(shape=input_shape, dtype='float32', name='input_image')  # 10 x 120 x 160 x 1
     input_matrix = Input(shape=(6,), dtype='float32', name='input_matrix')
@@ -127,32 +133,20 @@ def tedram_model(input_shape: Tuple, learning_rate: float = 0.0001, steps: int =
         b6 = Input(shape=(6, 6, 1), dtype='float32', name='b6')
         b4 = Input(shape=(4, 4, 1), dtype='float32', name='b4')
     inputs = [input_image, input_matrix, init_h1, init_c1, init_c2, b26, b24, b12, b8, b6, b4]
-    #################################
-    ###  Network Building Blocks  ###
-    #################################
-    glimpse_padding: str = None;
-    if (glimpse_size == (26, 26)):
+
+    ######################################
+    # #####  Network Building Blocks #####
+    ######################################
+
+    if glimpse_size == (26, 26):
         glimpse_padding = 'valid'
     else:
         glimpse_padding = 'same'
-    ### ------------------------------------------- layers for the EDRAM core cell
-    ## Glimpse Network (26x26 --> 192x4x4 --> 1024)
+    # layers for the EDRAM core cell
+    # Glimpse Network (26x26 --> 192x4x4 --> 1024)
     # 64 filters, 3x3 Convolution, zero padding --> 26x26
-    conv_1: Conv2D = None;
-    conv_1_bias: LocallyConnected2D = None;
-    conv_2: Conv2D = None;
-    conv_2_bias: LocallyConnected2D = None;
-    max_pooling: MaxPooling2D = None;
-    conv_3: Conv2D = None;
-    conv_3_bias: LocallyConnected2D = None;
-    max_pooling_2: max_pooling = None;
-    conv_4: conv_1;
-    conv_4_bias: conv_1_bias;
-    conv_5: conv_2;
-    conv_5_bias: conv_2_bias;
-    conv_6: conv_3;
-    conv_6_bias: conv_3_bias
-    if (unique_glimpse == False):
+
+    if unique_glimpse is False:
         conv_1 = Conv2D(int(n_filters / 2), filter_size1, padding='same', activation='relu', use_bias=False, name='glimpse_conv1')
         conv_1_bias = LocallyConnected2D(int(n_filters / 2), (1, 1), padding='valid', use_bias=False, name='glimpse_conv1_bias')
     else:
@@ -184,7 +178,11 @@ def tedram_model(input_shape: Tuple, learning_rate: float = 0.0001, steps: int =
     # fully connected, output_dim=1024
     glimpse_where: Dense = Dense(n_features, activation='relu', name='glimpse_where')
     # --> glimpse_what and where are multiplied to create Glimpse Network output
-    ## LSTMs
+
+    ########################################################################
+    # ########################### LSTMs ####################################
+    ########################################################################
+
     # reshape to 1-step sequence for LSTM
     reshape_to_sequence: Reshape = Reshape((1, n_features), name='to_sequence')
     # LSTMs
@@ -193,8 +191,10 @@ def tedram_model(input_shape: Tuple, learning_rate: float = 0.0001, steps: int =
     # classification network - outputs classification probabilities
     reshape_from_sequence = Reshape((RNN_size_1,), name='from_sequence')
 
+    ##########################################################
+    # #################### Classification Network ############
+    ##########################################################
 
-    ## Classification Network
     # fully connected, output_dim=1024
     cla_fc_1 = Dense(n_features, activation='relu', name='classification_fc1')
     # fully connected, output_dim=1024
@@ -202,7 +202,10 @@ def tedram_model(input_shape: Tuple, learning_rate: float = 0.0001, steps: int =
     # fully connected, output_dim=6, softmax activation
     cla_fc_3 = Dense(n_classes, activation='softmax', name='classification_fc3') # auf relu wechseln
 
-    ## Emission Network
+    ##################################################################
+    # ########################### Emission Network ###################
+    ##################################################################
+
     if unique_emission == False:
         em = Dense(6, activation='tanh', weights=emission_weights(RNN_size_2, emission_bias), name='emission_em')
     else:
@@ -213,31 +216,36 @@ def tedram_model(input_shape: Tuple, learning_rate: float = 0.0001, steps: int =
               conv_6, conv_6_bias, flatten, glimpse_what, glimpse_where,
               reshape_to_sequence, LSTM_classify, LSTM_localize, reshape_from_sequence,
               cla_fc_1, cla_fc_2, cla_fc_3, em)
-    ### the EDRAM Core Cells
+    # the EDRAM Core Cells
     output_localisation: bool = False if output_mode == 0 and steps == 1 else True
     # constant or decreassing clip values for the zoom factor of the glimpse STN
-    clip_value: ndarray = linspace(clip_value, clip_value, steps) if clip_value > 0 else linspace(1, 0.25, steps)
+    # clip_value: ndarray = linspace(clip_value, clip_value, steps) if clip_value > 0 else linspace(1, 0.25, steps)
     # constant or decreassing bias for the zoom factor of the emission network
     emission_bias: ndarray = linspace(emission_bias, emission_bias, steps) if emission_bias > 0 else linspace(1, 0.30,
                                                                                                               steps)
     edram_cell: List[Model] = []
     # STEPS should be set to 10
     for i in range(0, steps):
-        print('CALL TEDRAM CELL:', input_shape[1:], "LEN EDRAM CELL: ", len(edram_cell))
+        logging.debug("index: {}, CALL TEDRAM CELL: {}, LEN:{}".format(i, input_shape[1:], len(edram_cell)))
         edram_cell.append(tedram_cell(input_shape=input_shape[1:], glimpse_size=glimpse_size, n_filters=n_filters,
                                       RNN_size_1=RNN_size_1, RNN_size_2=RNN_size_2, bn=bn, dropout=dropout, layers=layers,
                                       output_localisation=output_localisation, step=str(i), unique_emission=unique_emission,
                                       unique_glimpse=unique_glimpse, emission_bias=emission_bias[i]))
-    ### Initialization Network
-    ### Context Network
-    ## downscale the input with STN, TODO: Do this in the preprocessing (but then coarse_size is fixed!)
+
+    ##########################################################
+    # ################### Initialization Network #############
+    ##########################################################
+    # Context Network
+    # downscale the input with STN, TODO: Do this in the preprocessing (but then coarse_size is fixed!)
+
     sl_coarse: Slice = Slice([0, 0, 0, 0, 0], [-1, 1, -1, -1, -1], name='sliceCoarse')
     input_image_co: Tensor = sl_coarse(input_image)
     # input_image_coarse: Tensor = BilinearInterpolation(coarse_size, 1)([input_image_co, input_matrix])
-    print('INPUT IMAGE COARSE:', input_image_co.shape)  # (?, 12, 12, ?)
+    logging.debug('INPUT IMAGE COARSE: {}'.format(input_image_co.shape))  # (?, 12, 12, ?)
     input_image_coarse: Tensor = BilinearInterpolation(height=coarse_size[0], width=coarse_size[1])( [input_image_co, input_matrix]);
 
-    ## 3 convolutions on 1x12x12 input: 5x5, 16 filters --> 3x3, 16 filters --> 3x3, 32 filters
+    # 3 convolutions on 1x12x12 input: 5x5, 16 filters --> 3x3, 16 filters --> 3x3, 32 filters
+
     bn_axis: int = 3
     x = Conv2D(int(n_filters / 8), filter_size2, padding='valid', use_bias=False, name='init_conv1')(input_image_coarse)
     b = LocallyConnected2D(int(n_filters / 8), (1, 1), padding='valid', use_bias=False, name='init_conv1_bias')(b8)
@@ -257,37 +265,46 @@ def tedram_model(input_shape: Tuple, learning_rate: float = 0.0001, steps: int =
     if do: x = Dropout(dropout, name='init_conv3_dropout')(x)
     if bn: x = BatchNormalization(axis=bn_axis, name='init_conv3_bn')(x)
     x = Flatten(name='init_flatten')(x)
-    ## Initialization of localization LSTM
+
+    #####################################################################
+    # ################## Initialization of localization LSTM ############
+    #####################################################################
+
     if unique_emission == False:
         init_matrix = em(x)
     else:
         init_matrix = Dense(6, activation='tanh', weights=emission_weights(RNN_size_2, emission_bias[0]), name='emission_loc')(x)
     init_h2 = Reshape((RNN_size_2,), name='initial_hidden_state_2')(x)
-    #############################
-    ###  Assemble everything  ###
-    #############################
-    # input_image0, input_image1 = None, None #type: Lambda, Lambda;
-    input_image1: Tensor
-    input_image0: Tensor
+
+    ####################################
+    # ###### Assemble everything #######
+    ####################################
+
     sl_0: Slice = Slice([0, 0, 0, 0, 0], [-1, 1, -1, -1, -1], name='sel_0')
+
     # -----------------  step zero (initialization)
+
     step = [[None, init_matrix if output_mode == 1 else input_matrix]]
-    # ------------------  step 1, INPUT_IMAGE (None, 10, 120,160,1) -> input_image[0][0] -> (120,160,1)
-    # input_image0: Lambda = Lambda(lambda x:x[:,0])(input_image);
     input_image0 = sl_0(input_image)
+
+    # ------------------  step 1, INPUT_IMAGE (None, 10, 120,160,1) -> input_image[0][0] -> (120,160,1)
+
     step.append(edram_cell[0](
         [input_image0, init_matrix if use_init_matrix else input_matrix, init_h1, init_c1, init_h2, init_c2, b26, b24,
          b12, b6 if glimpse_size == (26, 26) else b4, b4]))
-    # -------------------  "recurrently" apply edram network
+
+    # ------------------- "recurrently" apply EDRAM network for all reminding steps
+
     for i in range(1, steps):
         sl_i = Slice([0, i, 0, 0, 0], [-1, 1, -1, -1, -1], name='sel_{}'.format(i))
         input_image1 = sl_i(input_image)
         step.append(edram_cell[i](
             [input_image1, step[i][1], step[i][2], step[i][3], step[i][4], step[i][5], b26, b24, b12,
              b6 if glimpse_size == (26, 26) else b4, b4]))
-    ########################
-    ###  Define Outputs  ###
-    ########################
+
+    ##################################
+    # #######  Define Outputs ########
+    ##################################
     if output_mode == 0:
         # only use outputs of last time step
         classifications = Reshape((n_classes,), name='classifications')(step[steps][0])
@@ -304,10 +321,20 @@ def tedram_model(input_shape: Tuple, learning_rate: float = 0.0001, steps: int =
                 concatenate([step[i][1] for i in range(0, steps + 1)]))
     outputs: List[Any] = [classifications, localisations]
 
+    logging.debug("Classification output shape: {}".format(classifications.shape))  # (None, 6)
+    logging.debug("Locaisation output shape: {}".format(localisations.shape))  # (None, 2, 6)
+    logging.debug("Size of Input Set {} and Output Set {}".format(len(inputs), len(outputs)))  # 11 2
+
+    #########################################################
+    # ###################### build the model ################
+    #########################################################
+
     model = Model(inputs, outputs, name='tedram_model')
-    ############################
-    ###  Training Framework  ###
-    ############################
+
+    #########################################
+    # ########## Training Framework #########
+    #########################################
+
     # optimization algorithm
     optimizer = Adam(lr=learning_rate, clipnorm=10.)
     # define losses
@@ -317,17 +344,21 @@ def tedram_model(input_shape: Tuple, learning_rate: float = 0.0001, steps: int =
             # only use collision outcome weights for collision classification
             classification_loss = weighted_categorical_crossentropy(emotion_weights[use_weighted_loss])
             localisation_loss = weighted_mean_squared_error(localisation_weights[1 if n_classes == 7 else 0])
-        elif n_classes ==6:
-            classification_loss = 'categorical_crossentropy' # "binary_crossentropy" 
+        elif n_classes == 6:
+            classification_loss = 'categorical_crossentropy'  # "binary_crossentropy"
             localisation_loss = weighted_mean_squared_error(localisation_weights[1 if n_classes == 6 else 0])
     else:
         # standard losses
-        classification_loss = 'categorical_crossentropy' #'mean_squared_error'
+        classification_loss = 'categorical_crossentropy'  # 'mean_squared_error'
         localisation_loss = 'mean_squared_error'
 
-    ###########################
-    ###  Compile the Model  ###
-    ###########################
+    logging.debug('classification loss: {}'.format(classification_loss))
+    logging.debug('localisation_loss: {}'.format(localisation_loss))
+
+    ##############################################
+    # ############# Compile the Model ############
+    ##############################################
+
     model.compile(loss={'classifications': classification_loss, 'localisations': localisation_loss},
                   loss_weights={'classifications': 1, 'localisations': localisation_cost_factor},
                   metrics={'classifications': 'categorical_accuracy'}, optimizer=optimizer)
