@@ -8,8 +8,9 @@ src/stereoMatchingOpenCVCython
 __pycache__
 .idea
 token.txt
-src/make_predictions/visualiseTrainedData.py
-src/handle_outputImages/sample_image_dataset.py
+
+test/test_log.py
+
 checkpoints_reader.py
 collect_images.py
 src/handle_outputImages/seq.py
@@ -17,9 +18,4 @@ test/test.py
 README.md
 #git@github.com:CristianRodrigoGuarachiIbanez/sequential_tEDRA
 disparity_map.py
-src/handle_outputImages/sample_image_dataset.py
-src/make_predictions/visualiseTrainedData.py
-src/handle_outputImages/concat_binocular_images.py
-collect_images.py
-src/make_predictions/BBPrediction.py
-images
+run.sh

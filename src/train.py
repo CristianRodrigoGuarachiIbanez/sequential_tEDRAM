@@ -1,8 +1,10 @@
 import os
 import random
-
-from logging import info, basicConfig, INFO
-basicConfig(filemode='info.log', level=INFO, format='%(levelname)s:%(message)s')
+import sys
+import logging
+logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)s] %(message)s",
+                    handlers=[logging.FileHandler("debug.log"), logging.StreamHandler(sys.stdout)]
+                    )
 
 from typing import List, Tuple, Dict
 from numpy import ndarray, asarray, save, mean, std, newaxis
@@ -28,15 +30,16 @@ def train(list_params:str, gpu_id:int, dataset_id:int, model_id:int, load_path:s
     coarse_size = (coarse_size, coarse_size)
 
     # train on CDS?
-    if (dataset_id ==6):
-        n_classes = 7 # ------ OUTPUT
-    elif(model_id==2):
+    if dataset_id == 6:
+        n_classes = 7  # ------ OUTPUT
+    elif model_id == 2:
         n_classes = 1
     else:
-        n_classes = 4 # 6 oder 4
+        n_classes = 4  # 6 oder 4
+
     # train on high-res input?
-    input_shape:Tuple = load_dataset(dataset_id, config)
-    print("input shape: ", input_shape, "dateset ID: ", dataset_id)
+    input_shape: Tuple = load_dataset(dataset_id, config)
+    logging.debug("input shape: {}".format(input_shape), "dateset ID: {}".format(dataset_id))
 
     # create output directory
     save_path = './output/'+save_path+'/'
@@ -44,18 +47,19 @@ def train(list_params:str, gpu_id:int, dataset_id:int, model_id:int, load_path:s
         os.makedirs(save_path)
 
     # select a GPU
-    print("\n[Info] Using GPU", gpu_id)
+    logging.info("\n[Info] Using GPU".format(gpu_id))
     if gpu_id == -1:
-        print('[Error] You need to select a gpu. (e.g. python train.py --gpu=2)\n')
+        logging.warning('[Error] You need to select a gpu. (e.g. python train.py --gpu=2)\n')
         exit()
     os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_id)
 
     # create the EDRAM model
-    print("[Info] Creating the model...")
+    logging.info("[Info] Creating the model...")
+
     tedram = tEDRAM_TF(image_shape=input_shape)
-    if (load_path != '.'):
+    if load_path != '.':
         model_path = load_path + 'model.h5'
-        print("[Info] Loading the model from:", model_path,"\n")
+        logging.info("[Info] Loading the model from:  {}\n".format(model_path))
         try:
             tedram.set_model(load_model(model_path))
         except:
@@ -77,67 +81,72 @@ def train(list_params:str, gpu_id:int, dataset_id:int, model_id:int, load_path:s
                                        bn=use_batch_norm, dropout=dropout, use_weighted_loss=use_weighted_loss, localisation_cost_factor=localisation_cost_factor)
         else:
 
-            print('[Error] Only model 1 is available!\n')
+            logging.warning('[Error] Only model 1 is available!\n')
             exit()
 
     # model summary
-    if(list_params=='all' and model_id==3):
+    if list_params == 'all' and model_id == 3:
         tedram.model.get_layer('edram_cell').summary()
-    elif (list_params!='none'):
+    elif list_params != 'none':
         tedram.get_model().summary()
-    ###########################################################
-    ######### recover the data paths load the data ###########
-    ##########################################################
-    data_path: str = datasets[dataset_id]
-    if(dataset_id==6):
+
+    ############################################################
+    # ########  recover the data paths load the data  ##########
+    ############################################################
+
+    data_path: str  = datasets[dataset_id]
+    if dataset_id == 6 :
         labels_path = datasets[-2]
-    elif(model_id==2):
+    elif model_id == 2:
         labels_path = datasets[-1]
     else:
-        labels_path: str = datasets[0] # 0: path_labels 6 oder 4 labels
+        labels_path: str = datasets[0]  # 0: path_labels 6 oder 4 labels
 
-    print("\n[Info] Opening", data_path)
+    logging.info("\n[Info] Opening".format(data_path))
 
+    ############################################
+    # ############### load the image data ######
+    ############################################
     # initialize the declared image and label data
-    loader:LOADER = LOADER()
-
-    ############################################
-    ################ load the image data ######
-    ############################################
+    loader: LOADER = LOADER()
+    # load images
     loader.load_image_data(data_path)
-    # ------------- load labels 
+    #  load labels
     loader.load_label_data(labels_path)
+
     ###############################################################
-    ################### specify the arm side for the labels ######
-    ################### split into train and test set ############
+    # ################## specify the arm side for the labels ######
     ###############################################################
 
-    if(dataset_id==1):
+    if dataset_id == 1:
         loader.split_dataset_nongroup(dataset='scene_img', dataset_id=dataset_id)
-    elif(dataset_id==2):
+    elif dataset_id == 2:
         loader.split_dataset_nongroup(dataset="disparity_arrays_s", dataset_id=dataset_id)
-    elif (dataset_id == 3):
+    elif dataset_id == 3:
         loader.split_dataset_nongroup(dataset="disparity_arrays_56", dataset_id=dataset_id)
-    elif(dataset_id ==4):
+    elif dataset_id == 4:
         loader.split_dataset_nongroup(dataset="disparity_arrays_54", dataset_id=dataset_id)
-    elif(dataset_id ==5):
+    elif dataset_id == 5:
         loader.split_dataset_nongroup(dataset="binocular_images", dataset_id=dataset_id)
-    elif(dataset_id==6):
+    elif dataset_id == 6:
         loader.split_dataset_nongroup(dataset="emotions", dataset_id=dataset_id)
     else:
         loader.split_dataset(group="binocular_image", dataset="left_img", dataset_id=dataset_id)
 
-    train_images:ndarray=loader.get_train_images();
-    test_images:ndarray=loader.get_test_images();
-    train_labels:ndarray=loader.get_train_labels();
-    test_labels:ndarray=loader.get_test_labels()
-    train_locations: ndarray=loader.get_train_locations();
-    test_locations:ndarray=loader.get_test_locations()
+    # split into train and test set
+    train_images: ndarray = loader.get_train_images()
+    test_images: ndarray = loader.get_test_images()
+    train_labels: ndarray = loader.get_train_labels()
+    test_labels: ndarray = loader.get_test_labels()
+    train_locations: ndarray = loader.get_train_locations()
+    test_locations: ndarray = loader.get_test_locations()
+
     ##################################################################################################
-    ################## define the length of the set according the predefined indices ##################
+    # ################# define the length of the set according the predefined indices ################
     ##################################################################################################
+
     # normalize input data
-    if(normalize_inputs):
+    if normalize_inputs:
         indices = list(range(loader.get_n_train()))
         random.shuffle(indices)
         samples = train_images[sorted(indices[:1000]), ...]/scale_inputs
@@ -157,31 +166,33 @@ def train(list_params:str, gpu_id:int, dataset_id:int, model_id:int, load_path:s
         test_mean = 0
         test_sd = 1
 
-    print("[Info] Dataset Size:\n")
-    print(" ",loader.get_n_train(), "training examples")
-    print(" ", loader.get_n_test(), "test examples")
+    logging.info("[Info] Dataset Size:\n")
+    logging.info( "training examples {}".format(loader.get_n_train()))
+    logging.info( "test examples {}".format(loader.get_n_test()))
 
-    print("\n[Info] Data Dimensions\n")
-    if(len(train_images.shape)<4):
-        print("  Image with 3 dimensions:", train_images.shape[0],"x", train_images.shape[1], "x", train_images.shape[2],  )
-        train_images = train_images[:,newaxis,:,:]
-        print("  Images: ", train_images.shape[0],"x", train_images.shape[1], "x", train_images.shape[2], "x", train_images.shape[3])
-    elif(len(train_images.shape)==4):
-        print("  Images:   ", train_images.shape[0],"x", train_images.shape[1], "x", train_images.shape[2], "x", train_images.shape[3],)
-    elif(len(train_images.shape)==5):
-        print("  Images:   ", train_images.shape[0], "x", train_images.shape[1], "x", train_images.shape[2], "x", train_images.shape[3], "x", train_images.shape[4])
-    elif(len(train_images.shape)>5):
-        print("  Images:   ", train_images.shape)
+    logging.info("\n[Info] Data Dimensions\n")
+    if len(train_images.shape)<4:
+        logging.debug("Training Images Set with 3 Dim: {} x {} x{}".format(train_images.shape[0], train_images.shape[1], train_images.shape[2]))
+        train_images = train_images[:, newaxis, :, :]
+        logging.info("Training Images Set with 4 Dim: {} x {} x {} x {}".format(train_images.shape[0], train_images.shape[1], train_images.shape[2], train_images.shape[3]))
+    elif len(train_images.shape) == 4:
+        logging.info("Training Images Set: {} x {} x {} x {}".format(train_images.shape[0], train_images.shape[1], train_images.shape[2], train_images.shape[3]))
+    elif len(train_images.shape) == 5:
+        logging.info(" Training Images Set: {} x {} x {} x {} x {}".format(train_images.shape[0], train_images.shape[1], train_images.shape[2], train_images.shape[3], train_images.shape[4]))
+    elif len(train_images.shape) > 5:
+        logging.info("Training Images Set: ", train_images.shape)
 
-    print("  Labels:   ", train_labels.shape[0], "x", train_labels.shape[1])
+    logging.info("  Training Labels:  {} x {}".format(train_labels.shape[0], train_labels.shape[1]))
 
-    if(train_locations is not None):
-        print("  Locations:", train_locations.shape[1],"\n")
+    if train_locations is not None:
+        logging.debug("  Locations: {}".format(train_locations.shape[1]))
     else:
-        print("  Locations:", 6,"\n")
-    #################################################
-    #################### create callbacks ###########
-    #################################################
+        logging.debug("Locations: {}".format(6))
+
+    ##################################################
+    # ################### CREATE CALLBACKS ###########
+    ##################################################
+
     history = History()
     reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.333, patience=1, min_lr=0.00001, verbose=0)
     checkpoint = ModelCheckpoint(filepath=save_path+'checkpoint_weights', monitor='val_loss', save_best_only=True, save_weights_only=True)
@@ -218,7 +229,7 @@ def train(list_params:str, gpu_id:int, dataset_id:int, model_id:int, load_path:s
         save(save_path+'/history/'+str(key),history.history[key])
 
     # save the model
-    print('\n[Info] Saving the model...')
+    logging.info('\n[Info] Saving the model...')
 
     tedram.model.save(save_path+'/model', save_format='tf')
     tedram.model.save_weights(save_path+'/model_weights', save_format='tf')
