@@ -1,13 +1,13 @@
 from  typing import Dict, Tuple, TypeVar
 B:TypeVar = TypeVar("B", Tuple,str)
-config:Dict[str, B] = {
+config: Dict[str, B] = {
    # size of the input images
     'input_shape_scene': (10, 120, 240, 1),
-    'disparity_maps_s': (10,120,160,7),
-    'disparity_maps_56':  (10,120,160,56), #(5,56,120,160),
-    'disparity_maps': (10,7,8,120,160),
-    'input_shape_binocular': (10,120,160,2),
-    'input_affectnet': (6,100,100,1),
+    'disparity_maps_s': (10, 120, 160, 7),
+    'disparity_maps_56':  (10, 120, 160, 56),  # (5,56,120,160),
+    'disparity_maps': (10, 7, 8, 120, 160),
+    'input_shape_binocular': (10, 120, 160, 2),
+    'input_affectnet': (6, 100, 100, 1),
 
     # Paths to the datasets
     'path_labels': "/scratch/gucr/tEDRAM2/training_data/labels.txt",

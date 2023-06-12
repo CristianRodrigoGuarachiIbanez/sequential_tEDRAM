@@ -1,29 +1,41 @@
+"""
 
-from typing import List, Tuple, Any
-from numpy import ndarray, array, zeros, linspace, asarray, sqrt
+    Keras implementation of the EDRAM network of Ablavatski et al. (2017)
+
+        * tedram_cell       |
+
+"""
+
+from numpy import ndarray, array, zeros, asarray, sqrt
 from tensorflow.keras.layers import (Input,
-                          LSTM,
-                          Dense,
-                          Activation,
-                          Flatten,
-                          Reshape,
-                          Conv2D,
-                          LocallyConnected2D,
-                          MaxPooling2D,
-                          BatchNormalization,
-                          Dropout,
-                          concatenate,
-                          multiply,
-                          add,
-                          average,
-                          maximum,
-                          Lambda)
-
+                                     Dense,
+                                     Conv2D,
+                                     LocallyConnected2D,
+                                     BatchNormalization,
+                                     Dropout,
+                                     multiply,
+                                     add)
 
 from tensorflow.keras.models import Model
-from .spatial_transformation.models.layers_tfw import BilinearInterpolation
-#from .spatial_transformation.models.layers_tf import BilinearInterpolation as BilinearInterpolator
+from src.stEDRAM.models.spatial_transformation.models.layers_v2 import BilinearInterpolation
+from typing import List,Tuple
 from tensorflow import Tensor
+import logging
+import sys
+logger = logging.getLogger(__name__)
+FORMAT = "%(filename)s:%(lineno)s [%(levelname)s] %(message)s"
+logging.basicConfig(level=logging.DEBUG, format=FORMAT,
+                    handlers=[logging.FileHandler("debug.log"), logging.StreamHandler(sys.stdout)]
+                    )
+# number of emotions per class in ANet training file (in thousands)
+n: ndarray = asarray([78, 144, 29, 16, 8, 5, 28])
+w: float = sum(n)/(n*7)
+w2: ndarray = sqrt(w)
+
+
+localisation_weights: List[ndarray] = []
+localisation_weights.append(array([1.00, 0.25, 1.00, 0.25, 1.00, 1.00]))
+localisation_weights.append(array([1.00, 0.00, 0.00, 0.00, 1.00, 0.00]))
 
 
 def emission_weights(output_size: int, zoom_bias: int) -> List[ndarray]:
@@ -51,16 +63,15 @@ def emission_weights(output_size: int, zoom_bias: int) -> List[ndarray]:
     return weights
 
 
-def tedram_cell(input_shape: Tuple[int,int,int]=(120,160, 1), glimpse_size:Tuple[int,int]=(26,26), n_filters:int=128,
-                RNN_size_1:int=512, RNN_size_2:int=512, bn=True, dropout:int=0, layers=None,
-                output_localisation:int=True, output_emotion_dims:int=False, step:int=0, unique_emission:int=False,
-                unique_glimpse:int=False, emission_bias:int=1) -> Model:
+def tedram_cell(input_shape: Tuple[int, int, int] = (120,160, 1), glimpse_size: Tuple[int, int] = (26,26), n_filters: int = 128, RNN_size_1: int = 512, RNN_size_2: int = 512,
+                bn: bool = True, dropout: int = 0,  layers: Tuple = None, output_localisation: bool = True, step: str = ' ', unique_emission: int = False,
+                unique_glimpse: int = False, emission_bias: int = 1) -> Model:
     """
         One timestep of the EDRAM network with temporally separated batch normalization
 
         Parameters:
 
-            * input_shape: input image dimensions
+            * input_shape: input image dimensions (120,160,1)
             * glimpse_size: dimensions of the extracted image patch (the glimpse)
             * n_filters: determines the number of filters in the glimpse CNN
             * filter_size: dimensions of the glimpse CNN kernel
@@ -84,19 +95,16 @@ def tedram_cell(input_shape: Tuple[int,int,int]=(120,160, 1), glimpse_size:Tuple
 
     """
     # activate dropout
-    do: bool = True if dropout>0 else False
+    do: bool = True if dropout > 0 else False
 
     # unpack layers
-    (conv_1, conv_1_bias, conv_2, conv_2_bias, max_pooling_1,
-     conv_3, conv_3_bias, conv_4, conv_4_bias, max_pooling_2, conv_5,
-     conv_5_bias, conv_6, conv_6_bias, flatten, glimpse_what, glimpse_where,
-     reshape_to_sequence, LSTM_classify, LSTM_localize, reshape_from_sequence,
-     cla_fc_1, cla_fc_2, cla_fc_3, dim_fc_1, dim_fc_2, dim_fc_3, em) = layers
+    (conv_1, conv_1_bias, conv_2, conv_2_bias, max_pooling_1, conv_3, conv_3_bias, conv_4, conv_4_bias, max_pooling_2, conv_5,
+     conv_5_bias, conv_6, conv_6_bias, flatten, glimpse_what, glimpse_where, reshape_to_sequence, LSTM_classify, LSTM_localize,
+     reshape_from_sequence, cla_fc_1, cla_fc_2, cla_fc_3, em) = layers
 
-
-    #######################
-    ###  Define Inputs  ###
-    #######################
+    #############################################
+    # ################  Define Inputs ###########
+    #############################################
 
     # input image and localization matrix
     input_image: Input = Input(shape=input_shape, dtype='float32', name='input_image')
@@ -109,34 +117,34 @@ def tedram_cell(input_shape: Tuple[int,int,int]=(120,160, 1), glimpse_size:Tuple
     cell_state_2: Input = Input(shape=(RNN_size_2,),  dtype='float32', name='cell_state_2')
 
     # bias matrices
-    if glimpse_size==(26,26):
-        bias_26: Input = Input(shape=(26,26,1),  dtype='float32', name='bias_26')
-        bias_24: Input = Input(shape=(24,24,1),  dtype='float32', name='bias_24')
-        bias_12: Input = Input(shape=(12,12,1),  dtype='float32', name='bias_12')
-        bias_6: Input = Input(shape=(6,6,1),  dtype='float32', name='bias_6')
-        bias_4: Input = Input(shape=(4,4,1),  dtype='float32', name='bias_4')
+    if glimpse_size == (26, 26):
+        bias_26: Input = Input(shape=(26, 26, 1),  dtype='float32', name='bias_26')
+        bias_24: Input = Input(shape=(24, 24, 1),  dtype='float32', name='bias_24')
+        bias_12: Input = Input(shape=(12, 12, 1),  dtype='float32', name='bias_12')
+        bias_6: Input = Input(shape=(6, 6, 1),  dtype='float32', name='bias_6')
+        bias_4: Input = Input(shape=(4, 4, 1),  dtype='float32', name='bias_4')
     else:
-        bias_26: Input = Input(shape=(16,16,1),  dtype='float32', name='bias_26')
-        bias_24: Input = Input(shape=(16,16,1),  dtype='float32', name='bias_24')
-        bias_12: Input = Input(shape=(8,8,1),  dtype='float32', name='bias_12')
-        bias_6: Input = Input(shape=(4,4,1),  dtype='float32', name='bias_6')
-        bias_4: Input = Input(shape=(4,4,1),  dtype='float32', name='bias_4')
+        bias_26: Input = Input(shape=(16, 16, 1),  dtype='float32', name='bias_26')
+        bias_24: Input = Input(shape=(16, 16, 1),  dtype='float32', name='bias_24')
+        bias_12: Input = Input(shape=(8, 8, 1),  dtype='float32', name='bias_12')
+        bias_6: Input = Input(shape=(4, 4, 1),  dtype='float32', name='bias_6')
+        bias_4: Input = Input(shape=(4, 4, 1),  dtype='float32', name='bias_4')
 
     inputs: List[Input] =[input_image, input_matrix, hidden_state_1, cell_state_1, hidden_state_2, cell_state_2, bias_26, bias_24, bias_12, bias_6, bias_4]
 
-
-    ########################
-    ###  Connect Layers  ###
-    ########################
-
-    ## Glimpse Network
+    ############################################
+    # ################ Connect Layers ##########
+    ############################################
+    # Glimpse Network
     # spatial transformer, performs affine transformation of input image to a 26x26 patch
-    #x: Tensor = BilinearInterpolation(height=26, width=26)([input_image, input_matrix])
-    x: Tensor= BilinearInterpolation(glimpse_size, clip_value)([input_image, input_matrix])
+    x: BilinearInterpolation = BilinearInterpolation(height=glimpse_size[0], width=glimpse_size[1])
+    logging.debug('INPUT IMAGE: {}'.format(input_image.shape))
+    x: Tensor = x([input_image, input_matrix])
+    logging.debug("Bilinear Interpolation from tEDRAM cell:".format(x.shape)) # ? x 26 x 26 x ?
     bn_axis: int = 3
 
-    if unique_glimpse:
-        x: Conv2D = Conv2D(int(n_filters/2), (5,5), padding='same', activation='relu', use_bias=False, name='glimpse_conv1')(x)
+    if unique_glimpse != 0:
+        x = Conv2D(int(n_filters/2), (5,5), padding='same', activation='relu', use_bias=False, name='glimpse_conv1')(x)
         b: LocallyConnected2D = LocallyConnected2D(int(n_filters/2), (1,1), padding='valid', use_bias=False, name='glimpse_conv1_bias')(bias_26)
     else:
         x = conv_1(x)
@@ -172,13 +180,15 @@ def tedram_cell(input_shape: Tuple[int,int,int]=(120,160, 1), glimpse_size:Tuple
     if bn: x_where = BatchNormalization(name='glimpse_localisation_bn')(x_where)
     x = multiply([x_where, x_what], name='glimpse_output')
 
-    ## RNNs
-    rnn2, h2,c2 = None, None, None #type: ndarray, ndarray, ndarray
-    x = reshape_to_sequence(x)
-    rnn1, h1, c1 = LSTM_classify(x, initial_state=[hidden_state_1, cell_state_1]) #type: ndarray, ndarray, ndarray
+    ###################################
+    # ############# RNNs ##############
+    ###################################
+    x = reshape_to_sequence(x);
+
+    rnn1, h1, c1 = LSTM_classify(x, initial_state=[hidden_state_1, cell_state_1])  # type: ndarray, ndarray, ndarray
     if output_localisation:
-        rnn2, h2, c2 = LSTM_localize(rnn1, initial_state=[hidden_state_2, cell_state_2]) #type: ndarray, ndarray, ndarray
-    rnn1: ndarray = reshape_from_sequence(rnn1);
+        rnn2, h2, c2 = LSTM_localize(rnn1, initial_state=[hidden_state_2, cell_state_2])  # type: ndarray, ndarray, ndarray
+    rnn1 = reshape_from_sequence(rnn1);
 
     # apply dropout
     if do:
@@ -186,44 +196,38 @@ def tedram_cell(input_shape: Tuple[int,int,int]=(120,160, 1), glimpse_size:Tuple
         if output_localisation:
             rnn2 = Dropout(dropout, name='localisation_dropout')(rnn2)
 
+    #######################################################
+    # ################## Classification Network ###########
+    #######################################################
 
-    ## Classification Network
     x = cla_fc_1(rnn1)
     if bn: x = BatchNormalization(name='classification_fc1_bn')(x)
     x = cla_fc_2(x)
     if bn: x = BatchNormalization(name='classification_fc2_bn')(x)
     classification = cla_fc_3(x)
 
-    ## Affective Dimensions Network - outputs valence and arousal
-    if output_emotion_dims:
-        x = dim_fc_1(rnn1)
-        if bn: x = BatchNormalization(name='dimension_fc1_bn')(x)
-        x = dim_fc_2(x)
-        if bn: x = BatchNormalization(name='dimension_fc2_bn')(x)
-        dimension = dim_fc_3(x)
-    localisation: ndarray = None;
-    ## Emission Network - outputs the flat localization matrix
+    ###############################################
+    # ############### Emission Network ############
+    ###############################################
+    # outputs the flat localization matrix
+    localisation:Dense=None
     if output_localisation:
-        if unique_emission:
+        if (unique_emission):
+
             localisation = Dense(6, activation='tanh', weights=emission_weights(RNN_size_2, emission_bias), name='emission')(rnn2)
+
+            localisation = Dense(6, activation='tanh', weights=emission_weights(RNN_size_2, emission_bias), name='emission_flat_loc')(rnn2)
+
         else:
             localisation = em(rnn2)
 
+    ###########################################
+    # ##########  Define Outputs  #############
+    ###########################################
 
-    ########################
-    ###  Define Outputs  ###
-    ########################
-
-    if output_emotion_dims:
-        if output_localisation:
-            outputs=[classification, localisation, h1, c1, h2, c2, dimension]
-        else:
-            # this will lead to an error
-            outputs=[classification, h1, c1, dimension]
+    if output_localisation:
+        outputs=[classification, localisation, h1, c1, h2, c2]
     else:
-        if output_localisation:
-            outputs=[classification, localisation, h1, c1, h2, c2]
-        else:
-            outputs=[classification, h1, c1]
+        outputs=[classification, h1, c1]
 
-    return Model(inputs, outputs, name='edram_cell_'+str(step))
+    return Model(inputs, outputs, name='edram_cell_'+ step)

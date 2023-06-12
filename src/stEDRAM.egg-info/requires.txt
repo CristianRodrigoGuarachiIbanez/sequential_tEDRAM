@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 numpy==1.23.5
 tensorflow==2.12
 Cython==0.29.35
@@ -7,4 +8,15 @@ pytest>=6.0
 pytest-cov>=2.0
 mypy>=0.910
 flake8>=3.9
+=======
+Cython==0.29.35
+numpy==1.23.5
+tensorflow==2.12
+
+[testing]
+flake8>=3.9
+mypy>=0.910
+pytest-cov>=2.0
+pytest>=6.0
+>>>>>>> 74922553a475875c1769bcc36b890772896f0278
 tox>=3.24

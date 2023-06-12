@@ -1,3 +1,8 @@
+"""
+    Keras implementation of the EDRAM network of Ablavatski et al. (2017)
+        * tedram_model      |> tEDRAM (with separate batch normalization per time step)
+"""
+
 import sys
 import logging
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)s] %(message)s",

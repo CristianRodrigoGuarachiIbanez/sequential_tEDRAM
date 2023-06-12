@@ -1,0 +1,6 @@
+setup.py:25 [DEBUG] []
+setup.py:29 [DEBUG] LIBS ['-L/usr/lib/x86_64-linux-gnu'] usr/include/opencv2
+setup.py:30 [DEBUG] FOLDER: /usr/lib/x86_64-linux-gnu
+setup.py:25 [DEBUG] []
+setup.py:29 [DEBUG] LIBS ['-L/usr/lib/x86_64-linux-gnu'] usr/include/opencv2
+setup.py:30 [DEBUG] FOLDER: /usr/lib/x86_64-linux-gnu

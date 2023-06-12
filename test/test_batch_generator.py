@@ -9,6 +9,7 @@ n_steps = 10
 features: np.ndarray = np.zeros((200, 120, 160, 1))
 labels = np.ones((1, 10, 6))
 locations = np.empty((batch_size, 6))
+
 augment = False
 scale = 1
 normalize = False
@@ -72,3 +73,4 @@ if __name__ == "__main__":
 
     for l in L:
         print("input: ", l[0], "output: ", l[1])
+
