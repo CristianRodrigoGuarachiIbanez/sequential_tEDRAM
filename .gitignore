@@ -10,11 +10,23 @@ __pycache__
 .idea
 token.txt
 
+<<<<<<< HEAD
 checkpoints_reader.py
 output_analysis_tools/collect_images.py
 
+=======
+test/test_log.py
+
+checkpoints_reader.py
+collect_images.py
+src/stEDRAM/handle_outputImages/seq.py
+>>>>>>> 74922553a475875c1769bcc36b890772896f0278
 test/test.py
 README.md
 #git@github.com:CristianRodrigoGuarachiIbanez/sequential_tEDRA
 disparity_map.py
+<<<<<<< HEAD
 
+=======
+run.sh
+>>>>>>> 74922553a475875c1769bcc36b890772896f0278

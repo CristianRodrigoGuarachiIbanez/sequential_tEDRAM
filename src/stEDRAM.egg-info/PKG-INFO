@@ -5,7 +5,10 @@ Summary: sequential temporal EDRAM
 Home-page: UNKNOWN
 Author: Cristian Rodrigo Guarachi Ibanez
 License: MIT
+<<<<<<< HEAD
 Description: UNKNOWN
+=======
+>>>>>>> 74922553a475875c1769bcc36b890772896f0278
 Platform: unix
 Platform: linux
 Platform: osx
@@ -20,3 +23,10 @@ Classifier: Programming Language :: Python :: 3.9
 Classifier: Programming Language :: Python :: 3.10
 Requires-Python: >=3.6
 Provides-Extra: testing
+<<<<<<< HEAD
+=======
+License-File: LICENSE
+
+UNKNOWN
+
+>>>>>>> 74922553a475875c1769bcc36b890772896f0278

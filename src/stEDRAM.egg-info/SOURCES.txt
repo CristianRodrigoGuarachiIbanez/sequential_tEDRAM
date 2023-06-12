@@ -14,5 +14,10 @@ src/stEDRAM.egg-info/dependency_links.txt
 src/stEDRAM.egg-info/not-zip-safe
 src/stEDRAM.egg-info/requires.txt
 src/stEDRAM.egg-info/top_level.txt
+<<<<<<< HEAD
 test/test.py
 test/test_batch_generator.py
+=======
+test/test_batch_generator.py
+test/test_log.py
+>>>>>>> 74922553a475875c1769bcc36b890772896f0278

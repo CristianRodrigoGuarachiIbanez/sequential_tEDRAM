@@ -1,3 +1,9 @@
+
+"""
+    Keras implementation of the EDRAM network of Ablavatski et al. (2017)
+        * tedram_model      |> tEDRAM (with separate batch normalization per time step)
+"""
+
 import sys
 import logging
 logging.basicConfig(level=logging.DEBUG, format="%(asctime)s [%(levelname)s] %(message)s",
@@ -23,9 +29,10 @@ from .weighted_losses import weighted_mean_squared_error
 from tensorflow import Tensor
 from .tedram_cell import tedram_cell
 from .slices import Slice
-from .dimensionSlices import DimensionSlices
 from typing import List, Tuple, Callable, TypeVar, Any
 import cython
+
+
 localisation_weights: List[ndarray] = []
 localisation_weights.append(array([1.00, 0.25, 1.00, 0.25, 1.00, 1.00]))
 localisation_weights.append(array([1.00, 0.00, 0.00, 0.00, 1.00, 0.00]))

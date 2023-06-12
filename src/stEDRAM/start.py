@@ -19,11 +19,11 @@ from train import train
 ###  Default Training Parameters  ###
 #####################################
 
-_learning_rate:float = 0.0001
-_batch_size:int = 110
-_model_id:int = 1
-_n_steps:int = 10 # Größe der Bildsequenz
-_n_epochs:int = 15
+_learning_rate: float = 0.0001
+_batch_size: int = 110
+_model_id: int = 1
+_n_steps: int = 10  # Größe der Bildsequenz
+_n_epochs: int = 15
 
 def main(list_params, gpu_id, dataset_id, model_id, load_path, save_path, batch_size, learning_rate, n_epochs, augment_input, rotation, n_steps,
          glimpse_size, coarse_size, conv_sizes, n_filters, fc_dim, enc_dim, dec_dim, n_classes, output_mode, use_init_matrix, output_emotion_dims, headless,
@@ -58,17 +58,17 @@ def list_args(**args):
 
     lines:List[str] = []
     print_flag:bool = True
-    save_path:str = ' ';
+    save_path:str = ' '
 
     # generate lines for output
     for i, arg in enumerate(args.items()):
         if i <= 1:
-            if arg[1]=='none' and i==0:
+            if arg[1] == 'none' and i==0:
                 print_flag = False
             elif i == 0:
                 lines.append("\n[Info] Training Parameters\n")
         else:
-            if i==5:
+            if i == 5:
                 save_path = './output/'+arg[1]+'/'
             lines.append(' '*(25-len(arg[0]))+str(arg[0])+" = "+str(arg[1]))
     # write lines to disk and std.out
@@ -79,9 +79,9 @@ def list_args(**args):
             exit()
     out_file = open(save_path+'training_parameters.txt', 'w')
     for i, line in enumerate(lines):
-        if i>0:
+        if i > 0:
             out_file.write(line+"\n")
-        if print_flag and i!=1:
+        if print_flag and i != 1:
             print(line)
     out_file.close()
 
@@ -180,7 +180,6 @@ if __name__ == "__main__":
                         dest='localisation_cost_factor', help="Scales the location cost.")
 
     args = parser.parse_args()
-
 
     list_args(**vars(args))
     main(**vars(args))

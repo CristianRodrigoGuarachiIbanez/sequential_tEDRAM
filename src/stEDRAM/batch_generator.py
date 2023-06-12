@@ -7,6 +7,7 @@ basicConfig(filemode='info.log', level=INFO, format='%(levelname)s:%(message)s')
 
 from typing import Tuple, Dict
 from .sequenceConstructor import SequenceConstructor
+
 from numpy import ndarray, array, asarray, zeros, ones, hstack, reshape,transpose, uint8
 # from cython_modules.data_augmentation.imageDataGenerator import ImageDataGenerator
 from cython_modules.data_augmentation.augmentation_manager import PyImageDataGenerator
@@ -128,4 +129,5 @@ def batch_generator(dataset_size: int, batch_size: int, init_state_size: Tuple[i
             outputs = {'classifications': Y_cla}
 
         yield inputs, outputs
+
 
