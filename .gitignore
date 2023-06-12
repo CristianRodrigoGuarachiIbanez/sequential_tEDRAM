@@ -2,6 +2,10 @@
 cython_modules
 src/stEDRAM.egg-info
 src/stEDRAM/training_data/binocular_image_data.h5
+src/stEDRAM/training_data/label_data.txt
+src/stEDRAM/training_data/labels.txt
+src/stEDRAM/training_data/labels_counting.txt
+src/stEDRAM/training_data/sample_disparity_maps.txt
 images
 iCub_Vergence
 dependencies
