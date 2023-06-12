@@ -6,6 +6,7 @@ src/stEDRAM/training_data/label_data.txt
 src/stEDRAM/training_data/labels.txt
 src/stEDRAM/training_data/labels_counting.txt
 src/stEDRAM/training_data/sample_disparity_maps.txt
+
 images
 iCub_Vergence
 dependencies
