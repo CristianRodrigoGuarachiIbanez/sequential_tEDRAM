@@ -10,17 +10,17 @@ config: Dict[str, B] = {
     'input_affectnet': (6, 100, 100, 1),
 
     # Paths to the datasets
-    'path_labels': "/scratch/gucr/tEDRAM2/training_data/labels.txt",
-    'path_labels_affectnet': "/scratch/gucr/tEDRAM2/training_data/emotions_labels.txt",
-    'path_labels_one_output': "/scratch/gucr/tEDRAM2/training_data/labels_counting.txt",
+    'path_labels': "/scratch/gucr/tEDRAM2/training_dataset/labels.txt",
+    'path_labels_affectnet': "/scratch/gucr/tEDRAM2/training_dataset/emotions_labels.txt",
+    'path_labels_one_output': "/scratch/gucr/tEDRAM2/training_dataset/labels_counting.txt",
 
 
-    'scene_image': "/scratch/gucr/tEDRAM2/training_data/scene_image_data.h5",
-    'disparity_maps_sum': "/scratch/gucr/tEDRAM2/training_data/disparity_maps_s.h5",
-    'disparity_map_arrays_56': "/scratch/gucr/tEDRAM2/training_data/disparity_maps_56imgs.h5",
-    'disparity_map_arrays': "/scratch/gucr/tEDRAM2/training_data/disparity_maps.h5",
-    'input_binocular_arrays': "/scratch/gucr/tEDRAM2/training_data/binocular_images.h5",
-    'affectnet_data': "/scratch/gucr/tEDRAM2/training_data/AffectNet_train_data_keras.h5"
+    'scene_image': "/scratch/gucr/tEDRAM2/training_dataset/scene_image_data.h5",
+    'disparity_maps_sum': "/scratch/gucr/tEDRAM2/training_dataset/disparity_maps_s.h5",
+    'disparity_map_arrays_56': "/scratch/gucr/tEDRAM2/training_dataset/disparity_maps_56imgs.h5",
+    'disparity_map_arrays': "/scratch/gucr/tEDRAM2/training_dataset/disparity_maps.h5",
+    'input_binocular_arrays': "/scratch/gucr/tEDRAM2/training_dataset/binocular_images.h5",
+    'affectnet_data': "/scratch/gucr/tEDRAM2/training_dataset/AffectNet_train_data_keras.h5"
 }
 datasets = [config['path_labels'],
             config['scene_image'],

@@ -1,7 +1,11 @@
 .ipynb_checkpoints
 cython_modules
 src/stEDRAM.egg-info
-src/stEDRAM/training_data
+src/stEDRAM/training_dataset/binocular_image_data.h5
+src/stEDRAM/training_dataset/label_data.txt
+src/stEDRAM/training_dataset/labels.txt
+src/stEDRAM/training_dataset/labels_counting.txt
+src/stEDRAM/training_dataset/sample_disparity_maps.txt
 images
 iCub_Vergence
 dependencies

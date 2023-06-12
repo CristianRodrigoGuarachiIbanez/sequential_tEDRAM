@@ -9,13 +9,13 @@ config:Dict[str, B] = {
     'input_shape_binocular': (10, 2, 120,160, 1),
 
     # Paths to the datasets
-    'path_labels': "/scratch/gucr/tEDRAM2/training_data/label_data.txt",
+    'path_labels': "/scratch/gucr/tEDRAM2/training_dataset/label_data.txt",
 
-    'scene_image': "/scratch/gucr/tEDRAM2/training_data/training_data.h5",
-    'disparity_maps_sum': "/scratch/gucr/tEDRAM2/training_data/disparity_maps_s.h5",
-    'disparity_map_arrays_56': "/scratch/gucr/tEDRAM2/training_data/disparity_maps_56imgs.h5",
-    'disparity_map_arrays': "/scratch/gucr/tEDRAM2/training_data/disparity_maps.h5",
-    'input_binocular_arrays': "/scratch/gucr/tEDRAM2/training_data/binocular_image_data.h5",
+    'scene_image': "/scratch/gucr/tEDRAM2/training_dataset/training_dataset.h5",
+    'disparity_maps_sum': "/scratch/gucr/tEDRAM2/training_dataset/disparity_maps_s.h5",
+    'disparity_map_arrays_56': "/scratch/gucr/tEDRAM2/training_dataset/disparity_maps_56imgs.h5",
+    'disparity_map_arrays': "/scratch/gucr/tEDRAM2/training_dataset/disparity_maps.h5",
+    'input_binocular_arrays': "/scratch/gucr/tEDRAM2/training_dataset/binocular_image_data.h5",
 
 }
 datasets = [config['path_labels'],

@@ -24,9 +24,9 @@ def visualize(columns, frame):
     plt.subplots_adjust(wspace=0, hspace=0)
     plt.savefig("./images")
 
-path = r"src/training_data/collisions/"
+path = r"src/training_dataset/collisions/"
 output = r"./images/"
-#output2 =b"./training_data/scene_images/"
+#output2 =b"./training_dataset/scene_images/"
 dir = listdir(path)
 for i in range(len(dir)):
     flag = dir[i].replace("_",".").split(".")[1]

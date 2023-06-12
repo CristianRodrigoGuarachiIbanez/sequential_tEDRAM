@@ -66,7 +66,7 @@ if __name__ == '__main__':
 
     s = SequenceConstructor(100, 10, 7)  # 6
     print("RANDOM  MATRIX",s.getMatrix().shape)
-    arr = File('training_data/binocular_image_data.h5', 'r')
+    arr = File('training_dataset/binocular_image_data.h5', 'r')
     # key = arr['feature_data']["scene_data"]
     # print(key.shape)
     # img: ndarray = arr['feature_data']['binocular_data']
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     #p = SPLITTER(array(img))
     #left = p.recover_img()
     #print(left.shape)
-    with open('training_data/sample_disparity_maps.txt', 'rb') as file:
+    with open('training_dataset/sample_disparity_maps.txt', 'rb') as file:
         data: ndarray = load(file)
         print("label shape", data.shape)
         counter: int = 0
