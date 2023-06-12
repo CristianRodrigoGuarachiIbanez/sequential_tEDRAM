@@ -13,7 +13,7 @@ test/test_log.py
 
 checkpoints_reader.py
 collect_images.py
-src/handle_outputImages/seq.py
+src/stEDRAM/handle_outputImages/seq.py
 test/test.py
 README.md
 #git@github.com:CristianRodrigoGuarachiIbanez/sequential_tEDRA
