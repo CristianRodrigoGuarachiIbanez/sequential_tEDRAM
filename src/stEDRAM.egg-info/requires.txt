@@ -1,0 +1,10 @@
+Cython==0.29.35
+numpy==1.23.5
+tensorflow==2.12
+
+[testing]
+flake8>=3.9
+mypy>=0.910
+pytest-cov>=2.0
+pytest>=6.0
+tox>=3.24
