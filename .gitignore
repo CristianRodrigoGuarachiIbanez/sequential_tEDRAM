@@ -14,6 +14,7 @@ __pycache__
 token.txt
 output_analysis_tools/collect_images.py
 test/test.py
+test/debug.log
 README.md
 
 

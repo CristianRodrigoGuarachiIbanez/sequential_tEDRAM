@@ -72,7 +72,7 @@ def batch_generator(dataset_size: int, batch_size: int, init_state_size: Tuple[i
                 Y_loc = zeros((batch_size, 6), dtype='float32')
                 Y_loc[:, (0, 4)] = zoom
             else:
-                Y_loc = indices.samples(locations, start, end);
+                Y_loc = indices.samples(locations, start, end)
         else:
             # localization matrix is definitively not defined N x 10 x 6
             if locations is None:
@@ -80,7 +80,7 @@ def batch_generator(dataset_size: int, batch_size: int, init_state_size: Tuple[i
                 Y_loc[:, (0, 4)] = zoom
 
         # when using all outputs for training
-        if mode is not None:
+        if mode is True:
             Y_loc = reshape(Y_loc, (batch_size, 1, 6))
             Y_loc = hstack([Y_loc for _ in range(0, n_steps+mode2)])
 
@@ -121,8 +121,8 @@ def batch_generator(dataset_size: int, batch_size: int, init_state_size: Tuple[i
             inputs = {'input_image': I, 'input_matrix': A,
                       'initial_hidden_state_1': S1, 'initial_cell_state_1': S1,
                       'initial_cell_state_2': S2,
-                      'b26': B1, 'b24': B2, 'b12': B3, 'b8': B4, 'b6': B5, 'b4': B6};
-            outputs = {'classifications': Y_cla, 'localisations': Y_loc};
+                      'b26': B1, 'b24': B2, 'b12': B3, 'b8': B4, 'b6': B5, 'b4': B6}
+            outputs = {'classifications': Y_cla, 'localisations': Y_loc}
 
         elif model_id == 3 or model_id == 4:
             inputs = {'input_image': I}

@@ -1,6 +1,6 @@
 from cython_modules.img_random_sequences.randomSequencesConstructor import RandomSequencesConstructor
 # from image_cython.image_splitter import SPLITTER
-from numpy import ndarray, empty, int32, random, array, uint8
+from numpy import ndarray, zeros, array
 from typing import Generator, List
 from pickle import load
 from h5py import File
@@ -38,6 +38,7 @@ class SequenceConstructor:
         for i in range(start, end):
             current = next(currSequence)  # array of 10 values
             self._sequences.append(current)
+            # print("Current shape: {} {}".format(current, features.shape))
             listOfImgArraysSequences.append(array(features[current, ...], dtype='float32'))
         logging.debug('saved indices in samples: {}'.format(self._sequences))
         return array(listOfImgArraysSequences, dtype='float32')
@@ -58,7 +59,6 @@ class SequenceConstructor:
         :param end: interger
         :return: generator with individual image sequences (one dime array)
         '''
-
         for i in range(start, end):
             yield self.__matrix[i]
 
