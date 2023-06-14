@@ -1,15 +1,13 @@
 
 from tensorflow.keras import backend as K
 from tensorflow.keras.layers import Layer
-# from tensorflow.keras.engine.topology import Layer 
 from tensorflow.keras.layers import Input
-from typing import List, Tuple, Dict, Any
 
 from keras import backend as K
-from keras.engine.topology import Layer
+# from keras.engine.topology import Layer
 from typing import List, Tuple, Dict, Any
 from numpy import ndarray
-from keras.layers import Input
+# from keras.layers import Input
 if K.backend() == 'tensorflow':
     import tensorflow as tf
 

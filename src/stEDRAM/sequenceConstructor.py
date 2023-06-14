@@ -65,16 +65,6 @@ class SequenceConstructor:
 if __name__ == '__main__':
 
     s = SequenceConstructor(100, 10, 7)  # 6
-    print("RANDOM  MATRIX",s.getMatrix().shape)
-    arr = File('training_dataset/binocular_image_data.h5', 'r')
-    # key = arr['feature_data']["scene_data"]
-    # print(key.shape)
-    # img: ndarray = arr['feature_data']['binocular_data']
-    # print("image shape:", img.shape)
-    # a = s.samples(img, start=0, end=20)
-    #p = SPLITTER(array(img))
-    #left = p.recover_img()
-    #print(left.shape)
     with open('training_dataset/sample_disparity_maps.txt', 'rb') as file:
         data: ndarray = load(file)
         print("label shape", data.shape)
@@ -85,28 +75,7 @@ if __name__ == '__main__':
         # print("counter",counter)
         b = s.samples(data, start=0, end=10)
 
-    #print('a shape:',a.shape)
+    # print('a shape:',a.shape)
     print('b shape:', len(s.getMatrix()))
 
-
-    # right_img: ndarray;
-    # left_img: ndarray;
-    # path: str = r"./img_random_sequences"
-    # if not (exists(path)):
-    #     mkdir(path)
-    #
-    # for j in range(100):
-    #     scene = key[j,:,:,:]
-    #     s_img= (scene[:,:,0] * 255).astype(uint8)
-    #     s_img = Image.fromarray(s_img)
-    #     s_img.save(path +"/scene"+str(j)+".png")
-
-    # for i in range(20):
-    #     for j in range(10):
-    #         left = a[i,j,:,:,:,:]
-    #         print(left.shape)
-    #         left_img = (left[1,:,:,0] * 255).astype(uint8)
-    #         print(left_img.shape)
-    #         left_img = Image.fromarray(left_img)
-    #         left_img.save(path + "/left"+str(i) +".png")
     pass

@@ -18,15 +18,12 @@ from os.path import exists
 from os import makedirs
 from config import config, datasets
 from batch_generator import batch_generator
-from src.stEDRAM.dataset_tools import LOADER, load_dataset
-from src.stEDRAM.models import tEDRAM_TF
+from dataset_tools.fileLoader import LOADER, load_dataset
+from models.tedramManager import tEDRAMModelManager
 
-def train(list_params:str, gpu_id:int, dataset_id:int, model_id:int, load_path:str, save_path:str,
-         batch_size:int, learning_rate:float, n_epochs:int, augment_input:bool, rotation, n_steps:int, glimpse_size,
-         coarse_size:int, fc_dim:int, enc_dim:int, dec_dim:int, n_classes:int, output_mode:int, use_init_matrix:int,
-         headless:int, emission_bias:int, clip_value:int, unique_emission:int, unique_glimpse:int, scale_inputs:float,
-         normalize_inputs:bool,use_batch_norm:bool, dropout:int, use_weighted_loss:int,
-         localisation_cost_factor:float, zoom_factor:float):
+def train(list_params:str, gpu_id:int, dataset_id:int, model_id:int, load_path:str, save_path:str, batch_size:int, learning_rate:float, n_epochs:int, augment_input:bool, rotation, n_steps:int, glimpse_size,
+         coarse_size:int, fc_dim:int, enc_dim:int, dec_dim:int, n_classes:int, output_mode:int, use_init_matrix:int, headless:int, emission_bias:int, clip_value:int, unique_emission:int, unique_glimpse:bool,
+         scale_inputs:float, normalize_inputs:bool,use_batch_norm:bool, dropout:int, use_weighted_loss:int, localisation_cost_factor:float, zoom_factor:float):
 
     glimpse_size = (glimpse_size, glimpse_size)
     coarse_size = (coarse_size, coarse_size)
@@ -58,14 +55,14 @@ def train(list_params:str, gpu_id:int, dataset_id:int, model_id:int, load_path:s
     # create the EDRAM model
     logging.info("[Info] Creating the model...")
 
-    tedram = tEDRAM_TF(image_shape=input_shape)
+    tedram = tEDRAMModelManager(image_shape=input_shape)
     if load_path != '.':
         model_path = load_path + 'model.h5'
         logging.info("[Info] Loading the model from:  {}\n".format(model_path))
         try:
             tedram.set_model(load_model(model_path))
         except:
-            tedram.create_tedram_model(learning_rate=learning_rate, n_steps=n_steps,glimpse_size=glimpse_size, coarse_size=coarse_size, n_filters=128, filter_sizes=(3,5), n_features=fc_dim,
+            tedram.create_tedram_model(learning_rate=learning_rate, n_steps=n_steps, glimpse_size=glimpse_size, coarse_size=coarse_size, n_filters=128, filter_sizes=(3,5), n_features=fc_dim,
                                 RNN_size_1=enc_dim, RNN_size_2=dec_dim, n_classes=n_classes, output_mode=output_mode, use_init_matrix=use_init_matrix,
                                 emission_bias=emission_bias, clip_value=clip_value, unique_emission=unique_emission, unique_glimpse=unique_glimpse,
                                 bn=use_batch_norm, dropout=dropout, use_weighted_loss=use_weighted_loss, localisation_cost_factor=localisation_cost_factor)
@@ -206,7 +203,7 @@ def train(list_params:str, gpu_id:int, dataset_id:int, model_id:int, load_path:s
     # train the model
     try:
         hist = tedram.model.fit(
-            x=batch_generator(dataset_size=loader.get_n_train(), batch_size=batch_size, init_state_size=(enc_dim, dec_dim), n_steps=n_steps,
+            x=batch_generator(dataset_size=loader.get_n_train(), batch_size=batch_size, n_steps=n_steps, n_classes= n_classes, init_state_size=(enc_dim, dec_dim),
                               features=train_images, labels=train_labels, locations=train_locations, augment=datagen,
                               scale=scale_inputs, normalize=normalize_inputs, mean=train_mean, std=train_sd, mode=output_mode, mode2=use_init_matrix, mode3=headless,
                               model_id=model_id, glimpse_size=glimpse_size, zoom=zoom_factor),
@@ -214,8 +211,8 @@ def train(list_params:str, gpu_id:int, dataset_id:int, model_id:int, load_path:s
             epochs=n_epochs,
             verbose=1,
             callbacks=[history, reduce_lr, checkpoint],
-            validation_data=batch_generator(dataset_size=loader.get_n_test(), batch_size=batch_size, init_state_size=(enc_dim, dec_dim), n_steps=n_steps, features=test_images, labels=test_labels,
-                                            locations=test_locations, augment=None, scale=scale_inputs, normalize=normalize_inputs, mean=test_mean, std=test_sd, mode=output_mode,
+            validation_data=batch_generator(dataset_size=loader.get_n_test(), batch_size=batch_size, n_steps=n_steps, n_classes=n_classes ,init_state_size=(enc_dim, dec_dim), features=test_images, labels=test_labels,
+                                            locations=test_locations, augment=False, scale=scale_inputs, normalize=normalize_inputs, mean=test_mean, std=test_sd, mode=output_mode,
                                             mode2=use_init_matrix, mode3=headless, model_id=model_id, glimpse_size=glimpse_size, zoom=zoom_factor),
             validation_steps=int(loader.get_n_test() / batch_size), use_multiprocessing=False
         )

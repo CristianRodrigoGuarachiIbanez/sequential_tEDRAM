@@ -13,7 +13,7 @@ __pycache__
 .idea
 token.txt
 output_analysis_tools/collect_images.py
-test/test.py
+test/testPredictionOutputs/test_predictions.py
 test/debug.log
 README.md
 

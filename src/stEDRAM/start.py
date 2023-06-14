@@ -23,6 +23,8 @@ _learning_rate: float = 0.0001
 _batch_size: int = 110
 _model_id: int = 1
 _n_steps: int = 10  # Größe der Bildsequenz
+_seq_size = 10
+_n_classes = 6
 _n_epochs: int = 15
 
 def main(list_params, gpu_id, dataset_id, model_id, load_path, save_path, batch_size, learning_rate, n_epochs, augment_input, rotation, n_steps,
@@ -137,7 +139,7 @@ if __name__ == "__main__":
                         dest="enc_dim", help="Encoder RNN state dimension.")
     parser.add_argument("--dec_dim", type=int, default=512,
                         dest="dec_dim", help="Decoder  RNN state dimension.")
-    parser.add_argument("--classes", type=int, default=6,
+    parser.add_argument("--classes", type=int, default=_n_classes,
                         dest="n_classes", help="Number of classes for recognition.")
     parser.add_argument("--em_bias", "--emission_bias", type=float, default=1.0,
                         dest="emission_bias", help="Presets the zoom bias of the emission network.")

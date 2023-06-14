@@ -4,7 +4,7 @@ from .tedram_model_56img import tedram_model_56imgs
 from .tedram_one_output_model import tedram_op_model
 from tensorflow.keras.models import Model
 
-class tEDRAM_TF:
+class tEDRAMModelManager:
     input_shape_: Tuple
     model_: Model
 

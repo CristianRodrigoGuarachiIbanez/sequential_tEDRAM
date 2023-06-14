@@ -5,7 +5,8 @@ import unittest
 dataset_size = 100
 batch_size = 5
 init_state_size = (512, 512)
-n_steps = 5
+n_steps = 5 # or seq_size
+n_classes = 6
 features: np.ndarray = np.zeros((100, 120, 160, 1))
 labels = np.ones((100, 10, 6))
 locations = None # np.empty((batch_size, 6))
@@ -27,7 +28,7 @@ class TestBatchGenerator(unittest.TestCase):
 
     def __init__(self, *args, **kwargs):
         super(TestBatchGenerator, self).__init__(*args, **kwargs)
-        self.batch_generator_ = bg.batch_generator(dataset_size, batch_size, init_state_size, n_steps, features, labels, locations, augment,
+        self.batch_generator_ = bg.batch_generator(dataset_size, batch_size, n_steps, n_classes, init_state_size, features, labels, locations, augment,
                                scale, normalize, mean, std, mode, mode2, mode3, model_id, glimpse_size, zoom)
         self.test_ = next(self.batch_generator_)
         self.input_tests_ = self.multiple_input_tests(5)
@@ -60,7 +61,7 @@ class TestBatchGenerator(unittest.TestCase):
     def test_input_matrix_(self):
         # test1 = next(self.batch_generator_)
         img = self.test_[0].get("input_matrix")
-        return self.assertEqual(img.shape, (batch_size, 6), "the dims of input matrix")
+        return self.assertEqual(img.shape, (batch_size, n_classes), "the dims of input matrix")
 
     def test_initial_hidden_state_1(self):
         # test = next(self.batch_generator_)
@@ -91,10 +92,10 @@ class TestBatchGenerator(unittest.TestCase):
 
 if __name__ == "__main__":
 
-    L = bg.batch_generator(dataset_size, batch_size, init_state_size, n_steps, features, labels, locations, augment, scale, normalize, mean, std, mode, mode2, mode3, model_id, glimpse_size, zoom)
-
-    output = next(L)
-    img = output[0].get("input_image")
-    print(img.shape == (batch_size, n_steps, 120, 160, 1))
+    # L = bg.batch_generator(dataset_size, batch_size, n_steps, n_classes, init_state_size, features, labels, locations, augment, scale, normalize, mean, std, mode, mode2, mode3, model_id, glimpse_size, zoom)
+    #
+    # output = next(L)
+    # img = output[0].get("input_image")
+    # print(img.shape,(batch_size, n_steps, 120, 160, 1))
     unittest.main()
 

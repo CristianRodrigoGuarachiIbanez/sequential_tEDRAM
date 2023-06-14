@@ -17,11 +17,14 @@ from tensorflow.keras.layers import (Input,
                                      add)
 
 from tensorflow.keras.models import Model
-from src.stEDRAM.models.spatial_transformation.models.layers_v2 import BilinearInterpolation
 from typing import List,Tuple
 from tensorflow import Tensor
+
+from .spatial_transformation.models.layers_v2 import BilinearInterpolation
+
 import logging
 import sys
+
 logger = logging.getLogger(__name__)
 FORMAT = "%(filename)s:%(lineno)s [%(levelname)s] %(message)s"
 logging.basicConfig(level=logging.DEBUG, format=FORMAT,

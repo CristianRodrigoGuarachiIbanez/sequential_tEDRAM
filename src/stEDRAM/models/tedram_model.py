@@ -23,12 +23,14 @@ from tensorflow.keras.layers import (Input,
                                      add)
 from tensorflow.keras.models import Model
 from tensorflow.keras.optimizers import Adam
-from .spatial_transformation.models.layers_v2 import BilinearInterpolation
 from tensorflow import Tensor
+
+from .weighted_losses import weighted_categorical_crossentropy, weighted_mean_squared_error
+from .spatial_transformation.models.layers_v2 import BilinearInterpolation
 from .tedram_cell import tedram_cell
 from .slices import Slice
+
 from typing import List, Tuple, Any
-from src.stEDRAM.models.weighted_losses import weighted_categorical_crossentropy, weighted_mean_squared_error
 
 # number of emotions per class in ANet training file (in thousands)
 n = asarray([78, 144, 29, 16, 8, 5, 28])
@@ -146,7 +148,8 @@ def tedram_model(input_shape: Tuple, learning_rate: float = 0.0001, steps: int =
     # Glimpse Network (26x26 --> 192x4x4 --> 1024)
     # 64 filters, 3x3 Convolution, zero padding --> 26x26
 
-    if unique_glimpse is False:
+
+    if unique_glimpse is False or unique_glimpse == 0:
         conv_1 = Conv2D(int(n_filters / 2), filter_size1, padding='same', activation='relu', use_bias=False, name='glimpse_conv1')
         conv_1_bias = LocallyConnected2D(int(n_filters / 2), (1, 1), padding='valid', use_bias=False, name='glimpse_conv1_bias')
     else:
@@ -337,7 +340,12 @@ def tedram_model(input_shape: Tuple, learning_rate: float = 0.0001, steps: int =
 
     # optimization algorithm
     optimizer = Adam(lr=learning_rate, clipnorm=10.)
+
     # define losses
+    # standard losses
+    classification_loss = 'categorical_crossentropy'  # 'mean_squared_error'
+    localisation_loss = 'mean_squared_error'
+
     if use_weighted_loss:
         # weighted losses
         if n_classes == 7:
@@ -347,10 +355,6 @@ def tedram_model(input_shape: Tuple, learning_rate: float = 0.0001, steps: int =
         elif n_classes == 6:
             classification_loss = 'categorical_crossentropy'  # "binary_crossentropy"
             localisation_loss = weighted_mean_squared_error(localisation_weights[1 if n_classes == 6 else 0])
-    else:
-        # standard losses
-        classification_loss = 'categorical_crossentropy'  # 'mean_squared_error'
-        localisation_loss = 'mean_squared_error'
 
     logging.debug('classification loss: {}'.format(classification_loss))
     logging.debug('localisation_loss: {}'.format(localisation_loss))

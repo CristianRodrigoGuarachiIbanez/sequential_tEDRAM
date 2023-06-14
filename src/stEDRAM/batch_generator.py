@@ -6,19 +6,21 @@ from logging import info, basicConfig, INFO
 basicConfig(filemode='info.log', level=INFO, format='%(levelname)s:%(message)s')
 
 from typing import Tuple, Dict
-from .sequenceConstructor import SequenceConstructor
+try:
+    from .sequenceConstructor import SequenceConstructor
+except ImportError as I:
+    from sequenceConstructor import SequenceConstructor
 
 from numpy import ndarray, array, asarray, zeros, ones, hstack, reshape,transpose, uint8
 # from cython_modules.data_augmentation.imageDataGenerator import ImageDataGenerator
 from cython_modules.data_augmentation.augmentation_manager import PyImageDataGenerator
 
-def batch_generator(dataset_size: int, batch_size: int, init_state_size: Tuple[int,int], n_steps: int, features: ndarray,
-                    labels: ndarray, locations: ndarray, augment: bool, scale: float, normalize: bool, mean: float, std: float,
-                    mode: int, mode2: int, mode3: int, model_id: int, glimpse_size: Tuple[int,int], zoom: float):
+def batch_generator(dataset_size: int, batch_size: int, n_steps: int, n_classes: int, init_state_size: Tuple[int,int], features: ndarray, labels: ndarray, locations: ndarray, augment: bool, scale: float, normalize: bool,
+                    mean: float, std: float, mode: int, mode2: int, mode3: int, model_id: int, glimpse_size: Tuple[int,int], zoom: float):
 
     state_size_1, state_size_2 = init_state_size
 
-    indices: SequenceConstructor = SequenceConstructor(dataset_size, n_steps, n_steps)
+    indices: SequenceConstructor = SequenceConstructor(dataset_size, n_steps, n_classes)
     inputs: Dict[str, ndarray] = None
     outputs: Dict[str, ndarray] = None
 
