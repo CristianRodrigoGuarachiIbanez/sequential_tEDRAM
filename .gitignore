@@ -5,7 +5,7 @@ __pycache__
 dependencies
 cython_modules
 output_analysis_tools/collect_images.py
-
+scripts/run.txt
 src/cython_modules/__pycache__
 src/cython_modules/data_augmentation/__pycache__
 src/cython_modules/img_random_sequences/__pycache__
