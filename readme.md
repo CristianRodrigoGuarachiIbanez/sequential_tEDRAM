@@ -76,3 +76,20 @@ And run the script on a free GPU:
 
 	python start.py --gpu=1
 
+
+## RUN INSIDE DOCKER
+
+    git clone https://github.com/CristianRodrigoGuarachiIbanez/sequential_tEDRAM.git
+    
+    cd ./sequential_tEDRAM
+   
+    'docker run --rm -it -v $(pwd):/app stedram /bin/bash'
+
+    just in case: 
+
+    /app# 'python3 -m venv dependencies'
+    /app# 'python3 -m pip install --upgrade pip
+
+    to run the unit tests:
+
+    /app# bash run.sh -t 
