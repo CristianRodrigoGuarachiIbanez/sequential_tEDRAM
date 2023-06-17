@@ -2,7 +2,7 @@
 
 usage() { echo "Usage: $0 [-s <src>] [-t <test>]" 1>&2; exit 1; }
 # for linux
-DIR_UBUNTU=/home/cristian/PycharmProjects/tEDRAM/tEDRAM2
+DIR_UBUNTU=/home/cristian/PycharmProjects/tEDRAM/sequential_tEDRAM
 # fro windows wsl
 DIR_WIN=/mnt/c/Users/cristian.guarachi/PycharmProjects/sequential_tEDRAM
 
@@ -21,7 +21,11 @@ then
     echo "not virtual environment"
     python3.10 -m venv dependencies
 fi
+# rm -rf "$DIR"
+# python3 -m venv "$DIR_/dependencies"
 source "$DIR/activate"
+
+python3 -m pip install --upgrade pip
 python3 -m pip install -e ./
 
 test=0
@@ -36,7 +40,7 @@ while getopts st option; do
 done
 
 if [ ${src} -eq 1 ]; then
-  search_dir="$DIR_/src/stEDRAM"
+  search_dir="$DIR_/src/sEDRAM"
   cd "$DIR_/src/stEDRAM"
   python3 start.py --gpu=1
 elif [ ${test} -eq 1 ]; then
