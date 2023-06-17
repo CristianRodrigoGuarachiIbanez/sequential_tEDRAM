@@ -254,3 +254,165 @@ tedram_model.py:359 [DEBUG] classification loss: categorical_crossentropy
 tedram_model.py:360 [DEBUG] localisation_loss: mean_squared_error
 train.py:104 [INFO] 
 [Info] Opening
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+train.py:49 [INFO] 
+[Info] Using GPU
+train.py:56 [INFO] [Info] Creating the model...
+tedram_model.py:232 [DEBUG] index: 0, CALL TEDRAM CELL: (120, 240, 1), LEN:0
+tedram_cell.py:144 [DEBUG] INPUT IMAGE: (None, 120, 240, 1)
+tedram_cell.py:146 [DEBUG] Bilinear Interpolation from tEDRAM cell:
+tedram_model.py:232 [DEBUG] index: 1, CALL TEDRAM CELL: (120, 240, 1), LEN:1
+tedram_cell.py:144 [DEBUG] INPUT IMAGE: (None, 120, 240, 1)
+tedram_cell.py:146 [DEBUG] Bilinear Interpolation from tEDRAM cell:
+tedram_model.py:232 [DEBUG] index: 2, CALL TEDRAM CELL: (120, 240, 1), LEN:2
+tedram_cell.py:144 [DEBUG] INPUT IMAGE: (None, 120, 240, 1)
+tedram_cell.py:146 [DEBUG] Bilinear Interpolation from tEDRAM cell:
+tedram_model.py:232 [DEBUG] index: 3, CALL TEDRAM CELL: (120, 240, 1), LEN:3
+tedram_cell.py:144 [DEBUG] INPUT IMAGE: (None, 120, 240, 1)
+tedram_cell.py:146 [DEBUG] Bilinear Interpolation from tEDRAM cell:
+tedram_model.py:232 [DEBUG] index: 4, CALL TEDRAM CELL: (120, 240, 1), LEN:4
+tedram_cell.py:144 [DEBUG] INPUT IMAGE: (None, 120, 240, 1)
+tedram_cell.py:146 [DEBUG] Bilinear Interpolation from tEDRAM cell:
+tedram_model.py:232 [DEBUG] index: 5, CALL TEDRAM CELL: (120, 240, 1), LEN:5
+tedram_cell.py:144 [DEBUG] INPUT IMAGE: (None, 120, 240, 1)
+tedram_cell.py:146 [DEBUG] Bilinear Interpolation from tEDRAM cell:
+tedram_model.py:232 [DEBUG] index: 6, CALL TEDRAM CELL: (120, 240, 1), LEN:6
+tedram_cell.py:144 [DEBUG] INPUT IMAGE: (None, 120, 240, 1)
+tedram_cell.py:146 [DEBUG] Bilinear Interpolation from tEDRAM cell:
+tedram_model.py:232 [DEBUG] index: 7, CALL TEDRAM CELL: (120, 240, 1), LEN:7
+tedram_cell.py:144 [DEBUG] INPUT IMAGE: (None, 120, 240, 1)
+tedram_cell.py:146 [DEBUG] Bilinear Interpolation from tEDRAM cell:
+tedram_model.py:232 [DEBUG] index: 8, CALL TEDRAM CELL: (120, 240, 1), LEN:8
+tedram_cell.py:144 [DEBUG] INPUT IMAGE: (None, 120, 240, 1)
+tedram_cell.py:146 [DEBUG] Bilinear Interpolation from tEDRAM cell:
+tedram_model.py:232 [DEBUG] index: 9, CALL TEDRAM CELL: (120, 240, 1), LEN:9
+tedram_cell.py:144 [DEBUG] INPUT IMAGE: (None, 120, 240, 1)
+tedram_cell.py:146 [DEBUG] Bilinear Interpolation from tEDRAM cell:
+tedram_model.py:247 [DEBUG] INPUT IMAGE COARSE: (None, 120, 240, 1)
+tedram_model.py:327 [DEBUG] Classification output shape: (None, 10, 4)
+tedram_model.py:328 [DEBUG] Locaisation output shape: (None, 11, 6)
+tedram_model.py:329 [DEBUG] Size of Input Set 11 and Output Set 2
+optimizer.py:106 [WARNING] `lr` is deprecated, please use `learning_rate` instead, or use the legacy optimizer, e.g.,tf.keras.optimizers.legacy.Adam.
+tedram_model.py:359 [DEBUG] classification loss: categorical_crossentropy
+tedram_model.py:360 [DEBUG] localisation_loss: mean_squared_error
+train.py:104 [INFO] 
+[Info] Opening
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+tpu_cluster_resolver.py:32 [DEBUG] Falling back to TensorFlow client; we recommended you install the Cloud TPU client directly with pip install cloud-tpu-client.
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7
+__init__.py:47 [DEBUG] Creating converter from 7 to 5
+__init__.py:47 [DEBUG] Creating converter from 5 to 7

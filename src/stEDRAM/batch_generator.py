@@ -13,7 +13,10 @@ except ImportError as I:
 
 from numpy import ndarray, array, asarray, zeros, ones, hstack, reshape,transpose, uint8
 # from cython_modules.data_augmentation.imageDataGenerator import ImageDataGenerator
-from cython_modules.data_augmentation.augmentation_manager import PyImageDataGenerator
+try:
+    from c_modules.data_augmentation.augmentation_manager import PyImageDataGenerator
+except ImportError or ModuleNotFoundError:
+    from .c_modules.data_augmentation.augmentation_manager import PyImageDataGenerator
 
 def batch_generator(dataset_size: int, batch_size: int, n_steps: int, n_classes: int, init_state_size: Tuple[int,int], features: ndarray, labels: ndarray, locations: ndarray, augment: bool, scale: float, normalize: bool,
                     mean: float, std: float, mode: int, mode2: int, mode3: int, model_id: int, glimpse_size: Tuple[int,int], zoom: float):

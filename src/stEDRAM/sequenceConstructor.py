@@ -1,4 +1,7 @@
-from cython_modules.img_random_sequences.randomSequencesConstructor import RandomSequencesConstructor
+try:
+    from c_modules.random_sequences_generator.randomSequenceGenerator import RandomSequencesGenerator
+except ImportError or ModuleNotFoundError:
+    from .c_modules.random_sequences_generator.randomSequenceGenerator import RandomSequencesGenerator
 # from image_cython.image_splitter import SPLITTER
 from numpy import ndarray, zeros, array
 from typing import Generator, List
@@ -22,7 +25,7 @@ class SequenceConstructor:
         :param rows: integer, number of trials calculated from the total number of samples
         :param cols: integer, number of images in one image sequence
         '''
-        randomSeq: RandomSequencesConstructor = RandomSequencesConstructor(rows//n_classes, cols)  # empty((rows//10, cols), dtype=int);
+        randomSeq: RandomSequencesGenerator = RandomSequencesGenerator(rows//n_classes, cols)  # empty((rows//10, cols), dtype=int);
         self.__matrix = randomSeq.matrix()
         self._sequences: List[ndarray] = list()
 
